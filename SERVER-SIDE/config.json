@@ -1,0 +1,36 @@
+{
+    "classSectionsVector": {
+        "semester": {
+            "r": 4, "c": 0
+        },
+        "idTeacher": {
+            "r": 6, "c": 4
+        },
+        "time": {
+            "r": 7, "c": 2
+        },
+        "location": {
+            "r": 7, "c": 5
+        },
+        "code": {
+            "r": 8, "c": 2
+        },
+        "creditNumber": {
+            "r": 8, "c": 5
+        },
+        "name": {
+            "r": 9, "c": 2
+        },
+        "idStudents": {
+            "c": 1
+        }
+    },
+    "students": {
+        "rangeStart": "B2", 
+        "header":["code", "password", "fullname", "vnuEmail", "class"]
+    },
+    "teachers": {
+        "rangeStart": "B2", 
+        "header":["code", "password", "fullname", "vnuEmail"]
+    }
+}
