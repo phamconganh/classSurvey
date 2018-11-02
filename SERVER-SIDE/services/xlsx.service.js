@@ -11,7 +11,7 @@ service.readSurveyForm = readSurveyForm;
 service.writeResult = writeResult;
 module.exports = service;
 
-function readStudents(){
+function readStudents(file){
     try {
         // var workbook = XLSX.read(bstr, {type:"binary"});
         let studentConfig = CONFIG.students;

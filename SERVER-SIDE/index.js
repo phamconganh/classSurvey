@@ -1,10 +1,35 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
-// var config = require('./config.json');
+const mongoose = require("mongoose");
+const config = require('./config.json');
 
 const app = express();
 
+/*
+    Import Route controller
+*/
+var anwserSurvey = require('./controllers/anwser-survey.controller');
+var manageAccountStudent = require('./controllers/manage-account-student.controller');
+var manageAccountTeacher = require('./controllers/manage-account-teacher.controller');
+var manageSurveyClass = require('./controllers/manage-survey-class.controller');
+var manageSurvey = require('./controllers/manage-survey.controller');
+var viewResult = require('./controllers/view-result.controller');
+//  End import
+
+/*
+    Import middleware
+*/
+// var middlewareToken = require('./middlewares/token');
+//  End import middleware
+
+/*
+    Start connect Db
+*/
+mongoose.connect(config.db);
+
+/*
+    Set up
+*/
 //create application/x-www-form-urlencoded parser // default true
 app.use(bodyParser.urlencoded({ extended: false })); // => value only string or array
 app.use(bodyParser.json()); // => cho truy cap req.body
@@ -18,26 +43,17 @@ app.use((req, res, next) => {
 // app.use(express.urlencoded({ extended: false }));
 // app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-    Import Route modules
-*/
-// var indexRouter = require('./routes/index');
 
 /*
-    Import middleware
+    Route controller which should handle request
 */
-// var middlewareToken = require('./middlewares/token');
-
-/*
-    Connect Db
-*/
-
-
-
-/*
-    Routes which should handle request
-*/
-// app.use('/', middlewareToken,indexRouter);
+app.use('/api/anwserSurvey', anwserSurvey);
+app.use('/api/manageAccountStudent', manageAccountStudent);
+app.use('/api/manageAccountTeacher', manageAccountTeacher);
+app.use('/api/manageSurveyClass', manageSurveyClass);
+app.use('/api/manageSurvey', manageSurvey);
+app.use('/api/viewResult', viewResult);
+//  End Controller
 
 /*
     Middleware use
@@ -60,6 +76,11 @@ app.use((req, res, next) => {
 //     res.status(err.status || 500);
 //     res.render('error');
 // });
+
+/*
+    close connection
+*/
+mongoose.connection.close();
 
 module.exports = app;
 

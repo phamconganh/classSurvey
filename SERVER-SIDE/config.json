@@ -1,4 +1,14 @@
 {
+    "db": "mongodb://127.0.0.1:27017/classSurvey",
+    "secretKey": "6d0fc20a1cc92d4de0d8cefee937b827",
+    "timeExpires": "3600s",
+    "cookieExpires": "3600",
+    "port" : "3000",
+    "permission": {
+        "admin": 0,
+        "teacher": 1,
+        "student": 2
+    },
     "classSectionsVector": {
         "semester": {
             "r": 4, "c": 0

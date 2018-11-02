@@ -7,6 +7,6 @@ export class User {
     fullname: string;
     class: string;
     permission: number;
-    classSection: Array<string>;
+    classSections: Array<string>;
     // birthDay: string;
 }
