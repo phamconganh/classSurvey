@@ -1,28 +1,31 @@
-const XLSX = require('xlsx');
+var XLSX = require('xlsx');
 const CONFIG = require('../config.json');
-var service = {};
-service.readStudents = readStudents;
-service.writeStudents = writeStudents;
-service.readTeachers = readTeachers;
-service.writeTeachers = writeTeachers;
-service.readClassSections = readClassSections;
-service.writeClassSections = writeClassSections;
-service.readSurveyForm = readSurveyForm;
-service.writeResult = writeResult;
-module.exports = service;
+
+var helper = {};
+
+helper.readStudents = readStudents;
+helper.writeStudents = writeStudents;
+helper.readTeachers = readTeachers;
+helper.writeTeachers = writeTeachers;
+helper.readClassSections = readClassSections;
+helper.writeClassSections = writeClassSections;
+helper.readSurveyForm = readSurveyForm;
+helper.writeResult = writeResult;
+
+module.exports = helper;
 
 function readStudents(file){
     try {
-        // var workbook = XLSX.read(bstr, {type:"binary"});
         let studentConfig = CONFIG.students;
-        let workbook = XLSX.readFile('./../ds_tai_khoan_sinh_vien.xlsx');
+        let workbook = XLSX.read(file)
         let sheet_name_list = workbook.SheetNames;
         let sheet = workbook.Sheets[sheet_name_list[0]];
         let range = sheet['!ref'];
         let rangeSet = studentConfig.rangeStart + ':' + range.split(':')[1];
-        return XLSX.utils.sheet_to_json(sheet, {range: rangeSet, header: studentConfig.header})
+        let data = XLSX.utils.sheet_to_json(sheet, {range: rangeSet, header: studentConfig.header})
+        return Promise.resolve(data);
     } catch (error) {
-        throw error;
+        return Promise.reject(error);
     }
 }
 

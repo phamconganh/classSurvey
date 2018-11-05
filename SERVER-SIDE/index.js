@@ -1,19 +1,19 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require("mongoose");
+var express = require('express');
+var bodyParser = require('body-parser');
+var mongoose = require("mongoose");
 const config = require('./config.json');
 
-const app = express();
+var app = express();
 
 /*
-    Import Route controller
+    Import Route route
 */
-var anwserSurvey = require('./controllers/anwser-survey.controller');
-var manageAccountStudent = require('./controllers/manage-account-student.controller');
-var manageAccountTeacher = require('./controllers/manage-account-teacher.controller');
-var manageSurveyClass = require('./controllers/manage-survey-class.controller');
-var manageSurvey = require('./controllers/manage-survey.controller');
-var viewResult = require('./controllers/view-result.controller');
+// var anwserSurvey = require('./routes/anwser-survey.route');
+var manageAccountStudent = require('./routes/manage-account-student.route');
+// var manageAccountTeacher = require('./routes/manage-account-teacher.route');
+// var manageSurveyClass = require('./routes/manage-survey-class.route');
+// var manageSurvey = require('./routes/manage-survey.route');
+// var viewResult = require('./routes/view-result.route');
 //  End import
 
 /*
@@ -25,8 +25,10 @@ var viewResult = require('./controllers/view-result.controller');
 /*
     Start connect Db
 */
-mongoose.connect(config.db);
-
+mongoose.connect(config.db, { useNewUrlParser: true }).then(
+    () => { console.log('connected ' + config.db) },
+    err => { console.log(err) }
+);
 /*
     Set up
 */
@@ -45,15 +47,15 @@ app.use((req, res, next) => {
 
 
 /*
-    Route controller which should handle request
+    Route route which should handle request
 */
-app.use('/api/anwserSurvey', anwserSurvey);
+// app.use('/api/anwserSurvey', anwserSurvey);
 app.use('/api/manageAccountStudent', manageAccountStudent);
-app.use('/api/manageAccountTeacher', manageAccountTeacher);
-app.use('/api/manageSurveyClass', manageSurveyClass);
-app.use('/api/manageSurvey', manageSurvey);
-app.use('/api/viewResult', viewResult);
-//  End Controller
+// app.use('/api/manageAccountTeacher', manageAccountTeacher);
+// app.use('/api/manageSurveyClass', manageSurveyClass);
+// app.use('/api/manageSurvey', manageSurvey);
+// app.use('/api/viewResult', viewResult);
+//  End route
 
 /*
     Middleware use
@@ -80,7 +82,10 @@ app.use('/api/viewResult', viewResult);
 /*
     close connection
 */
-mongoose.connection.close();
+// mongoose.connection.close().then(
+//     () => { console.log('disconnected') },
+//     err => { console.log('error') }
+// );
 
 module.exports = app;
 
@@ -98,7 +103,7 @@ module.exports = app;
 // }).unless({ path: ['/users/authenticate', '/users/register'] }));
 
 // // routes
-// app.use('/users', require('./controllers/users.controller'));
+// app.use('/users', require('./routes/users.route'));
 
 // // error handler
 // app.use(function (err, req, res, next) {

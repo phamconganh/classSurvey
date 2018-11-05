@@ -1,24 +1,21 @@
 // var config = require('config.json');
-const express = require('express');
-const router = express.Router();
-const studentService = require('../services/manage-account-student.service');
-const xlsxService = require('../services/xlsx.service')
+const studentHelper = require('../helpers/manage-account-student.helper');
 
-// routes
-router.get('/', getAll);
-// router.post('/authenticate', authenticate);
-router.post('/create', create);
-router.get('/current', getCurrent);
-router.put('/:_id', update);
-router.post('/import', importFile);
-router.get('/export', exportFile);
-router.post('/find', find);
-router.delete('/:_id', _delete);
+var controller = {};
 
-module.exports = router;
+controller.getAll = getAll;
+controller.create = create;
+controller.getCurrent = getCurrent;
+controller.update = update;
+controller.importFile = importFile;
+controller.exportFile = exportFile;
+controller.find = find;
+controller._delete = _delete;
+
+module.exports = controller;
 
 // function authenticate(req, res) {
-//     studentService.authenticate(req.body.username, req.body.password)
+//     studentHelper.authenticate(req.body.username, req.body.password)
 //         .then(function (user) {
 //             if (user) {
 //                 // authentication successful
@@ -34,7 +31,7 @@ module.exports = router;
 // }
 
 function getAll(req, res) {
-    studentService.getAll()
+    studentHelper.getAll()
         .then(function (students) {
             res.send(students);
         })
@@ -44,7 +41,7 @@ function getAll(req, res) {
 }
 
 function create(req, res) {
-    studentService.create(req.body)
+    studentHelper.create(req.body)
         .then(function (student) {
             // res.json('success');
             res.send(student);
@@ -55,7 +52,7 @@ function create(req, res) {
 }
 
 function getCurrent(req, res) {
-    studentService.getById(req.body._id)
+    studentHelper.getById(req.params._id)
         .then(function (student) {
             if (student) {
                 res.send(student);
@@ -69,7 +66,7 @@ function getCurrent(req, res) {
 }
 
 function update(req, res) {
-    studentService.update(req.params._id, req.body)
+    studentHelper.update(req.params._id, req.body)
         .then(function (student) {
             // res.json('success');
             res.send(student);
@@ -80,18 +77,18 @@ function update(req, res) {
 }
 
 function importFile (req, res) {
-    // studentService.importStudents(req.body)
-    //     .then(function () {
-    //         // res.json('success');
-    //         res.send(students);
-    //     })
-    //     .catch(function (err) {
-    //         res.status(400).send(err);
-    //     });
+    studentHelper.importStudents(req.file.buffer)
+        .then(function (students) {
+            // res.json('success');
+            res.send(students);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }
 
 function exportFile(req, res) {
-    // studentService.exportStudents(req.body)
+    // studentHelper.exportStudents(req.body)
     //     .then(function () {
     //         // res.json('success');
     //         res.send(students);
@@ -102,7 +99,7 @@ function exportFile(req, res) {
 }
 
 function find(req, res) {
-    // studentService.exportStudents(req.body)
+    // studentHelper.exportStudents(req.body)
     //     .then(function () {
     //         // res.json('success');
     //         res.send(students);
@@ -113,7 +110,7 @@ function find(req, res) {
 }
 
 function _delete(req, res) {
-    studentService.delete(req.params._id)
+    studentHelper._delete(req.params._id)
         .then(function () {
             res.json('success');
         })
