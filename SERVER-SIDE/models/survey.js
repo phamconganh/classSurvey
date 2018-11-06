@@ -4,15 +4,11 @@ var Schema = mongoose.Schema;
  * Schema survey
  */
 var Survey = new Schema({
-    // _id: String,
-	// semester: String,
-	// idTeacher: {type: String, ref: 'User'},
-    // time: String,
-    // location: String,
-    // code: String,
-    // name: String,
-	// creditNumber: Number,
-    // idStudents: [String] // ??? {type: String, ref: 'User'}
+	idClassSection: {type: Schema.Types.ObjectId, ref: 'Student'},
+	createdAt: String,
+    modifiedAt: String,
+    idSurveyForm: {type: Schema.Types.ObjectId, ref: 'SurveyForm'},
+    data: [String]
     // active: Boolean,
     // timestamp: Date
 })

@@ -4,15 +4,14 @@ var Schema = mongoose.Schema;
  * Schema classSection
  */
 var ClassSection = new Schema({
-    _id: String,
 	semester: String,
-	idTeacher: {type: String, ref: 'User'},
+	idTeacher: {type: Schema.Types.ObjectId, ref: 'User'},
     time: String,
     location: String,
     code: String,
     name: String,
 	creditNumber: Number,
-    idStudents: [String] // ??? {type: String, ref: 'User'}
+    idStudents: [{type: Schema.Types.ObjectId, ref: 'User'}]
     // active: Boolean,
     // timestamp: Date
 })

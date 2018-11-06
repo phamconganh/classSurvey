@@ -11,7 +11,6 @@ var User = new Schema({
 	password: String,
     code: String,
     fullname: String,
-    class: String,
 	// permission = 0 admin, 1 teacher, 2 user
 	permission: Number,
     classSections: [{type: String, ref: 'ClassSection'}]
