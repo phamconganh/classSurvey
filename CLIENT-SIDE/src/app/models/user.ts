@@ -5,8 +5,5 @@ export class User {
     password: string;
     code: string;
     fullname: string;
-    class: string;
     permission: number;
-    classSections: Array<string>;
-    // birthDay: string;
 }

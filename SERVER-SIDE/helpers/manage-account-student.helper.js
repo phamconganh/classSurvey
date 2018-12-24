@@ -10,7 +10,7 @@ helper.update = update;
 helper.importStudents =importStudents;
 helper.exportStudents = exportStudents;
 helper.find = find;
-helper.delete = _delete;
+helper._delete = _delete;
 
 module.exports = helper;
 
@@ -42,8 +42,14 @@ async function update(_id, studentParam) {
                 name: "Account conflict", 
                 message: 'Username "' + studentParam.username + '" is already taken'
             })
-        else return await Student._update(studentParam);
-    } else return await Student._update(studentParam);
+        else {
+            let student = await Student._update(_id, studentParam);
+            return await Student.getById(_id);
+        }
+    } else  {
+        let student = await Student._update(_id, studentParam);
+        return await Student.getById(_id);
+    }
 }
 
 async function importStudents (file){

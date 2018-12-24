@@ -68,10 +68,10 @@ function getCurrent(req, res) {
 function update(req, res) {
     studentHelper.update(req.params._id, req.body)
         .then(function (student) {
-            // res.json('success');
             res.send(student);
         })
         .catch(function (err) {
+            console.log(err)
             res.status(400).send(err);
         });
 }
@@ -112,7 +112,7 @@ function find(req, res) {
 function _delete(req, res) {
     studentHelper._delete(req.params._id)
         .then(function () {
-            res.json('success');
+            res.json('Đã xóa thành công');
         })
         .catch(function (err) {
             res.status(400).send(err);

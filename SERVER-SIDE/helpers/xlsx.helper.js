@@ -23,6 +23,11 @@ function readStudents(file){
         let range = sheet['!ref'];
         let rangeSet = studentConfig.rangeStart + ':' + range.split(':')[1];
         let data = XLSX.utils.sheet_to_json(sheet, {range: rangeSet, header: studentConfig.header})
+        for (let index = 0; index < data.length; index++) {
+            for(let key of Object.keys(data[index])){
+                data[index][key] = data[index][key].toString().trim();
+            }
+        }
         return Promise.resolve(data);
     } catch (error) {
         return Promise.reject(error);

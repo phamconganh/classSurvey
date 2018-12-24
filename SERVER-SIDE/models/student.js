@@ -19,7 +19,26 @@ Student.statics.getAll = function() {
 }
 
 Student.statics.getById = function(_id) {
-    // chua hoan chinh, can sua -> xem thong tin chi tiet ve sinh vien va cac lop hoc sv tham gia
+	// let lookupStudent = {
+	// 	$lookup:{
+	// 		from: 'user',
+	// 		localField: 'classSections',
+	// 		foreignField: 'idStudents',
+	// 		as: 'classSections'
+	// 	}
+    // }
+	// let match = {
+	// 	$match: {
+	// 		id: _id
+	// 	}
+	// }
+	// if (typeFind == config.doctor){
+	// 	match['$match']['$or'].push(
+	// 		{'departmentId._id': search},
+	// 		{'departmentId.name': search}
+	// 	);
+	// }
+	// return this.aggregate([lookupStudent,match]);
     return this.findById( _id, '-password -classSections');
 }
 Student.statics.findUser = function(searchParam) {

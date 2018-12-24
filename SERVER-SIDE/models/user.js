@@ -78,12 +78,14 @@ User.statics._create = function(userParam){
 }
 
 User.statics._update = function( _id, userParam) {
-    let user = userParam;
-    // update password if it was entered
-    if (userParam.password) {
+	let user = userParam;
+	// update password if it was entered
+    if (userParam.password != null) {
         user.password = bcrypt.hashSync(userParam.password, 10);
-    }
-    return this.updateOne(
+    } else {
+		delete user.password;
+	}
+    return this.findOneAndUpdate(
         { _id: _id },
         { $set: user }
     );
