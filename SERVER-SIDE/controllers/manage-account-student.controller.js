@@ -31,6 +31,7 @@ module.exports = controller;
 // }
 
 function getAll(req, res) {
+
     studentHelper.getAll()
         .then(function (students) {
             res.send(students);

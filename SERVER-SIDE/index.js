@@ -10,7 +10,7 @@ var app = express();
 */
 // var anwserSurvey = require('./routes/anwser-survey.route');
 var manageAccountStudent = require('./routes/manage-account-student.route');
-// var manageAccountTeacher = require('./routes/manage-account-teacher.route');
+var manageAccountTeacher = require('./routes/manage-account-teacher.route');
 // var manageSurveyClass = require('./routes/manage-survey-class.route');
 // var manageSurvey = require('./routes/manage-survey.route');
 // var viewResult = require('./routes/view-result.route');
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
 */
 // app.use('/api/anwserSurvey', anwserSurvey);
 app.use('/api/manageAccountStudent', manageAccountStudent);
-// app.use('/api/manageAccountTeacher', manageAccountTeacher);
+app.use('/api/manageAccountTeacher', manageAccountTeacher);
 // app.use('/api/manageSurveyClass', manageSurveyClass);
 // app.use('/api/manageSurvey', manageSurvey);
 // app.use('/api/viewResult', viewResult);
