@@ -225,22 +225,15 @@ export class ManageAccountStudentComponent implements OnInit {
       attr: {
         class: 'table table-bordered'
       },
-      // add: {
-      //   // addButtonContent: '<i class="fas fa-address-card"></i>',
-      //   // createButtonContent: '<i class="ion-checkmark"></i>',
-      //   // cancelButtonContent: '<i class="ion-close"></i>',
-      //   confirmCreate: true
-      // },
-      // edit: {
-      //   // editButtonContent: '<i class="ion-edit"></i>',
-      //   // saveButtonContent: '<i class="ion-checkmark"></i>',
-      //   // cancelButtonContent: '<i class="ion-close"></i>',
-      //   confirmSave: true
-      // },
-      // delete: {
-      //   // deleteButtonContent: '<i class="ion-trash-a"></i>',
-      //   confirmDelete: true
-      // },
+      add: {
+        addButtonContent: '<i class="fas fa-address-card">Thêm</i>',
+      },
+      edit: {
+        editButtonContent: '<i class="fas fa-edit"></i>',
+      },
+      delete: {
+        deleteButtonContent: '<i class="fas fa-trash"></i>',
+      },
     };
     this.loadData();
     this.initForm();
@@ -324,16 +317,17 @@ export class ManageAccountStudentComponent implements OnInit {
   } 
 
   onSearch() {
-    // this.manageAccountStudentService.find().subscribe(
-    //   studentsRes => {
-    //     this.source.reset(false);
-    //     this.source.load(studentsRes);
-    //   },
-    //   error => {
-    //     alert(error);
-    //     // this.router.navigate(['/error', id ])
-    //   }
-    // )
+    this.manageAccountStudentService.find(this.keySearch).subscribe(
+      studentsRes => {
+        this.source.reset(false);
+        this.source.load(studentsRes);
+        this.keySearch = null;
+      },
+      error => {
+        alert(error);
+        // this.router.navigate(['/error', id ])
+      }
+    )
   }
   
   // filterData(){
@@ -376,12 +370,31 @@ export class ManageAccountStudentComponent implements OnInit {
     }
   }
 
+  exportFile(){
+    this.manageAccountStudentService.exportFile().subscribe(
+      file => {
+        // console.log(file);
+        // can chinh sua ten file
+        let blob = new Blob([file.body], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        let downloadUrl= window.URL.createObjectURL(blob);
+        window.open(downloadUrl);
+      },
+      error => {
+        alert(error);
+        // this.router.navigate(['/error', id ])
+      }
+    )
+  }
+
   onSubmit(){
     if(!this.formStudent.invalid){
       if(this.action == TypeAction.Create){
         this.manageAccountStudentService.create(this.formStudent.value).subscribe(
           student => {
             alert('Tạo thành công tài khoản: ' + student.fullname);
+            this.loadData();
             this.detailModal.hide();
           },
           error => {
@@ -393,6 +406,7 @@ export class ManageAccountStudentComponent implements OnInit {
         this.manageAccountStudentService.update(this.studentObject['_id'].value, this.formStudent.value).subscribe(
           student => {
             alert('Chỉnh sửa thành công tài khoản: ' + student.fullname);
+            this.loadData();
             this.detailModal.hide();
           },
           error => {

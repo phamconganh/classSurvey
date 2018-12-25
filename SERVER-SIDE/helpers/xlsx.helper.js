@@ -34,7 +34,33 @@ function readStudents(file){
     }
 }
 
-function writeStudents(){
+function writeStudents(data){
+    /* create workbook & set props*/
+    dataWrite = [];
+    for (let index = 0; index < data.length; index++) {
+        let element = data[index];
+        let jsonData = {
+            "STT": index + 1,
+            "Mã sinh viên/Tên đăng nhập": element.code,
+            "Mật khẩu": "",
+            "Họ và tên": element.fullname,
+            "VNU email": element.vnuEmail,
+            "Khóa đào tạo": element.class,
+            "Tên đăng nhập chỉnh sửa": element.username
+        }
+        dataWrite.push(jsonData);
+    }
+    const wb = { SheetNames: [], Sheets: {} };
+    wb.Props = {
+        Title: "Danh sách tài khoản sinh viên"
+    };
+    /*create sheet data & add to workbook*/
+    var ws = XLSX.utils.json_to_sheet(dataWrite);
+    var ws_name = "Danh sách tài khoản sinh viên";
+    XLSX.utils.book_append_sheet(wb, ws, ws_name);
+    /* create file 'in memory' */
+    var wbout = new Buffer(XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' }));
+    return wbout;
 
 }
 

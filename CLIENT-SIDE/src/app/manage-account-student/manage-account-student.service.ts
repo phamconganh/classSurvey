@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { appConfig } from "../app.config";
 // import { Student } from "../models/student";
 
@@ -42,11 +42,13 @@ export class ManageAccountStudentService {
   }
 
   exportFile(){
-
+    const url = this.urlApi + appConfig.exportFile;
+    return this.http.post<any>(url,{}, {'responseType': 'blob' as 'json', observe: 'response'});
   }
 
   find(key){
-
+    const url = this.urlApi + appConfig.find;
+    return this.http.post<any>(url,{keySearch: key});
   }
 
   _delete(_id){
