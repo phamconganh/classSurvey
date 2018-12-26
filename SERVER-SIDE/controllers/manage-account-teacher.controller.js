@@ -15,7 +15,7 @@ controller._delete = _delete;
 module.exports = controller;
 
 // function authenticate(req, res) {
-//     studentHelper.authenticate(req.body.username, req.body.password)
+//      teacherHelper.authenticate(req.body.username, req.body.password)
 //         .then(function (user) {
 //             if (user) {
 //                 // authentication successful
@@ -31,7 +31,6 @@ module.exports = controller;
 // }
 
 function getAll(req, res) {
-    
     teacherHelper.getAll()
         .then(function (teachers) {
             res.send(teachers);
@@ -43,9 +42,9 @@ function getAll(req, res) {
 
 function create(req, res) {
     teacherHelper.create(req.body)
-        .then(function (teachers) {
+        .then(function (teacher) {
             // res.json('success');
-            res.send(teachers);
+            res.send(teacher);
         })
         .catch(function (err) {
             res.status(400).send(err);
@@ -78,7 +77,7 @@ function update(req, res) {
 }
 
 function importFile (req, res) {
-    teacherHelper.importStudents(req.file.buffer)
+    teacherHelper.importTeachers(req.file.buffer)
         .then(function (teachers) {
             // res.json('success');
             res.send(teachers);
@@ -89,25 +88,27 @@ function importFile (req, res) {
 }
 
 function exportFile(req, res) {
-    // teacherHelper.exportTeachers(req.body)
-    //     .then(function () {
-    //         // res.json('success');
-    //         res.send(teachers);
-    //     })
-    //     .catch(function (err) {
-    //         res.status(400).send(err);
-    //     });
+    teacherHelper.exportTeachers()
+        .then(function (wbout) {
+            let filename = "DsTaiKhoanCanBo.xlsx";
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', 'attachment; filename=' + filename);
+            res.type('application/octet-stream');
+            res.send(wbout);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }
 
 function find(req, res) {
-    // teacherHelper.exportTeachers(req.body)
-    //     .then(function () {
-    //         // res.json('success');
-    //         res.send(teachers);
-    //     })
-    //     .catch(function (err) {
-    //         res.status(400).send(err);
-    //     });
+    teacherHelper.find(req.body.keySearch)
+        .then(function(teachers) {
+            res.send(teachers);
+        })
+        .catch(function (err) {
+            res.status(404).send(err);
+        });
 }
 
 function _delete(req, res) {

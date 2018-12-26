@@ -86,12 +86,13 @@ async function importTeachers (file){
     }
 }
 
-function exportTeachers (file){
-    
+async function exportTeachers (){
+    let teachers = await Teacher.getAll();
+    return xlsxTeachers.writeTeachers(teachers);
 }
 
-function find (search){
-    
+function find(keySearch){
+    return Teacher.findUser(keySearch);
 }
 
 function _delete(_id) {

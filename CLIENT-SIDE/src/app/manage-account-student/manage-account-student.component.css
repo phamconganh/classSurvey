@@ -1,4 +1,4 @@
-/* :host /deep/ ng2-smart-table table{
+ :host /deep/ ng2-smart-table table{
     border-style: inset;
     border-color: initial;
     border-image: initial;
@@ -6,8 +6,9 @@
     
     display: table;
     border-spacing: 2px;
-    border-color: grey; /* border of the big table*/
-/*} */
+    border-color: aqua; /* border of the big table*/
+    text-align: center;
+}
 
 /* grid lines */
 /* :host /deep/ ng2-smart-table table > tbody > tr > td {

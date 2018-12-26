@@ -17,6 +17,7 @@ var User = new Schema({
     // active: Boolean,
     // timestamp: Date
 })
+
 User.statics.getAll = function() {
     return this.find();
 }
@@ -25,8 +26,14 @@ User.statics.getById = function(_id) {
     return this.findById(_id);
 }
 
-User.statics.findUser = function(searchParam) {
-    // let search = {$regex: '.*' + searchParam.data + '.*', $options: 'i'};
+User.statics.findUser = function(keySearch) {
+	let search = {$regex: '.*' + keySearch + '.*', $options: 'i'};
+	return this.find({$or: [
+		{code: search},
+		{username: search},
+		{vnuEmail: search},
+		{fullname: search}
+	]})
 	// let lookupUser = {
 	// 	$lookup:{
 	// 		from: 'department',

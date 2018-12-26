@@ -89,25 +89,27 @@ function importFile (req, res) {
 }
 
 function exportFile(req, res) {
-    // studentHelper.exportStudents(req.body)
-    //     .then(function () {
-    //         // res.json('success');
-    //         res.send(students);
-    //     })
-    //     .catch(function (err) {
-    //         res.status(400).send(err);
-    //     });
+    studentHelper.exportStudents()
+        .then(function (wbout) {
+            let filename = "DsTaiKhoanSinhVien.xlsx";
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', 'attachment; filename=' + filename);
+            res.type('application/octet-stream');
+            res.send(wbout);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }
 
 function find(req, res) {
-    // studentHelper.exportStudents(req.body)
-    //     .then(function () {
-    //         // res.json('success');
-    //         res.send(students);
-    //     })
-    //     .catch(function (err) {
-    //         res.status(400).send(err);
-    //     });
+    studentHelper.find(req.body.keySearch)
+        .then(function(students) {
+            res.send(students);
+        })
+        .catch(function (err) {
+            res.status(404).send(err);
+        });
 }
 
 function _delete(req, res) {

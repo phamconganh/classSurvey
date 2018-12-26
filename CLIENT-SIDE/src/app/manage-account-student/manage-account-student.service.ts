@@ -42,11 +42,13 @@ export class ManageAccountStudentService {
   }
 
   exportFile(){
-
+    const url = this.urlApi + appConfig.exportFile;
+    return this.http.post<any>(url,{}, {'responseType': 'blob' as 'json', observe: 'response'});
   }
 
   find(key){
-
+    const url = this.urlApi + appConfig.find;
+    return this.http.post<any>(url,{keySearch: key});
   }
 
   _delete(_id){

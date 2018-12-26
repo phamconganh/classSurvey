@@ -11,6 +11,7 @@ var Student = new Schema({
 	permission: {type: Number, default: permissionStudent},
     // classSections: [{type: String, ref: 'ClassSection'}]
 })
+
 Student.statics.getAll = function() {
     return this.find(
         { permission: permissionStudent },
@@ -41,48 +42,20 @@ Student.statics.getById = function(_id) {
 	// return this.aggregate([lookupStudent,match]);
     return this.findById( _id, '-password -classSections');
 }
-Student.statics.findUser = function(searchParam) {
-    // let search = {$regex: '.*' + searchParam.data + '.*', $options: 'i'};
-	// let lookupStudent = {
-	// 	$lookup:{
-	// 		from: 'user',
-	// 		localField: 'classSections',
-	// 		foreignField: 'idStudents',
-	// 		as: 'classSections'
-	// 	}
-    // }
-    // let rules = [];
-    // for (let i=0; i<searchParam.rules.length; i++){
-    //     rules.push({searchParam.rules[i]: })
-    // }
-	// let match = {
-	// 	$match: {
-	// 		$or: [
-	// 			{_id: search},
-	// 			{name: search},
-	// 			{card: search},
-	// 			{phoneNumber: search},
-	// 			{userName: search},
-	// 			{address: search},
-	// 			{level: search},
-	// 			{experience: search},
-	// 			{token: search}
-	// 		]
-	// 	}
-	// }
-	// if (objectType != config.admin){
-	// 	match['$match'].active = true;
-	// }
-	// if (typeFind != config.admin){
-	// 	match['$match'].objectType = typeFind;
-	// }
-	// if (typeFind == config.doctor){
-	// 	match['$match']['$or'].push(
-	// 		{'departmentId._id': search},
-	// 		{'departmentId.name': search}
-	// 	);
-	// }
-	// return this.aggregate([lookupDepartment,match]).sort({_id: 1});
+Student.statics.findUser = function(keySearch) {
+	let search = {$regex: '.*' + keySearch + '.*', $options: 'i'};
+	return this.find(
+		{
+			$or: [
+				{code: search},
+				{username: search},
+				{vnuEmail: search},
+				{fullname: search}
+			],
+			permission: permissionStudent
+		},
+		'-password -classSections'
+	)
 }
 /**
  * name, Schema
