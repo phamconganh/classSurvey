@@ -163,7 +163,7 @@ export class ManageAccountTeacherComponent implements OnInit {
         },
         fullname: {
           title: 'Họ và tên',
-          width: '20%'
+          width: '25%'
         },
         username: {
           title: 'Tên đăng nhập',
@@ -171,11 +171,11 @@ export class ManageAccountTeacherComponent implements OnInit {
         },
         vnuEmail: {
           title: 'Vnu email',
-          width: '20%'
+          width: '25%'
         },
         permission:{
           title: 'Quyền',
-          width: '10%',
+          width: '15%',
           filter: {
             type: 'list',
             config: {
