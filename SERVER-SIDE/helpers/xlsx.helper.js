@@ -113,7 +113,7 @@ function writeTeachers(data){
 function readClassSections(file){
     try {
         let vector = CONFIG.classSectionsVector;
-        let workbook = XLSX.readFile(file);
+        let workbook = XLSX.read(file);
         let sheet_name_list = workbook.SheetNames;
         let sheet = workbook.Sheets[sheet_name_list[0]];
         let range = XLSX.utils.decode_range(sheet['!ref']);

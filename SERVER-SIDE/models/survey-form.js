@@ -5,6 +5,10 @@ var Schema = mongoose.Schema;
  */
 var SurveyForm = new Schema({
     isActive: Boolean,
+    createdAt: String,
+    modifiedAt: String,
+    groupClassSection: String,
+    semester: String,
     data: [{
         section: String,
         dataSection: [{

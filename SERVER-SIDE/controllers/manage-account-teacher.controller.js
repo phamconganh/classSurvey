@@ -36,7 +36,12 @@ function getAll(req, res) {
             res.send(teachers);
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
 
@@ -47,7 +52,12 @@ function create(req, res) {
             res.send(teacher);
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
 
@@ -61,7 +71,12 @@ function getCurrent(req, res) {
             }
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
 
@@ -71,8 +86,12 @@ function update(req, res) {
             res.send(teacher);
         })
         .catch(function (err) {
-            console.log(err)
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
 
@@ -83,7 +102,12 @@ function importFile (req, res) {
             res.send(teachers);
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
 
@@ -107,7 +131,12 @@ function find(req, res) {
             res.send(teachers);
         })
         .catch(function (err) {
-            res.status(404).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 404
+                }
+            });;
         });
 }
 
@@ -117,6 +146,11 @@ function _delete(req, res) {
             res.json('Đã xóa thành công');
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
