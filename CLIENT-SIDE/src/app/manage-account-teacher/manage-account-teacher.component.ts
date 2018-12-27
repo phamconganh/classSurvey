@@ -195,13 +195,13 @@ export class ManageAccountTeacherComponent implements OnInit {
         class: 'table table-bordered'
       },
       add: {
-        addButtonContent: '<i class="fas fa-address-card">Thêm</i>',
+        addButtonContent: '<i class="fas fa-address-card"> Thêm</i>',
       },
       edit: {
-        editButtonContent: '<i class="fas fa-edit"></i>',
+        editButtonContent: '<i class="fas fa-edit mr-sm-2"></i>',
       },
       delete: {
-        deleteButtonContent: '<i class="fas fa-trash"></i>',
+        deleteButtonContent: '<i class="fas fa-trash ml-sm-2"></i>',
       },
     };
     this.loadData();
@@ -230,8 +230,13 @@ export class ManageAccountTeacherComponent implements OnInit {
   loadData(){
     this.manageAccountTeacherService.getAll().subscribe(
       teachersRes => {
-        this.source.reset(false);
-        this.source.load(teachersRes);
+        if(teachersRes.error){
+          alert(teachersRes.error.message);
+        // this.router.navigate(['/error', id ])
+        } else {
+          this.source.reset(false);
+          this.source.load(teachersRes);
+        }
       },
       error => {
         alert(error);
@@ -271,8 +276,13 @@ export class ManageAccountTeacherComponent implements OnInit {
     if(check){
       this.manageAccountTeacherService._delete(event.data._id).subscribe(
         message => {
-          this.source.remove(event.data);
-          alert(message);
+          if(message.error){
+            alert(message.error.message);
+          // this.router.navigate(['/error', id ])
+          } else {
+            this.source.remove(event.data);
+            alert(message);
+          }
         },
         error => {
           alert(error);
@@ -287,9 +297,14 @@ export class ManageAccountTeacherComponent implements OnInit {
   onSearch() {
     this.manageAccountTeacherService.find(this.keySearch).subscribe(
       teachersRes => {
-        this.source.reset(false);
-        this.source.load(teachersRes);
-        this.keySearch = null;
+        if(teachersRes.error){
+          alert(teachersRes.error.message);
+        // this.router.navigate(['/error', id ])
+        } else {
+          this.source.reset(false);
+          this.source.load(teachersRes);
+          this.keySearch = null;
+        }
       },
       error => {
         alert(error);
@@ -304,16 +319,21 @@ export class ManageAccountTeacherComponent implements OnInit {
       if(check){
         this.manageAccountTeacherService.importFile(event.target.files[0]).subscribe(
           teachersRes => {
-            this.loadData();
-            if(teachersRes.dataRejects.length > 0){
-              this.errInfo = teachersRes.dataRejects;
-              this.errInfoModal.show();
+            if(teachersRes.error){
+              alert(teachersRes.error.message);
+            // this.router.navigate(['/error', id ])
             } else {
-              alert('Thêm các cán bộ thành công');
+              this.loadData();
+              if(teachersRes.dataRejects.length > 0){
+                this.errInfo = teachersRes.dataRejects;
+                this.errInfoModal.show();
+              } else {
+                alert('Thêm các cán bộ thành công');
+              }
             }
           },
           error => {
-            alert(error.message);
+            alert(error);
             // this.router.navigate(['/error', id ])
           }
         )
@@ -345,9 +365,14 @@ export class ManageAccountTeacherComponent implements OnInit {
       if(this.action == TypeAction.Create){
         this.manageAccountTeacherService.create(this.formTeacher.value).subscribe(
           teacher => {
-            alert('Tạo thành công tài khoản: ' + teacher.fullname);
-            this.loadData();
-            this.detailModal.hide();
+            if(teacher.error){
+              alert(teacher.error.message);
+            // this.router.navigate(['/error', id ])
+            } else {
+              alert('Tạo thành công tài khoản: ' + teacher.fullname);
+              this.loadData();
+              this.detailModal.hide();
+            }
           },
           error => {
             alert(error);
@@ -357,9 +382,14 @@ export class ManageAccountTeacherComponent implements OnInit {
       } else if(this.action == TypeAction.Edit){
         this.manageAccountTeacherService.update(this.teacherObject['_id'].value, this.formTeacher.value).subscribe(
           teacher => {
-            alert('Chỉnh sửa thành công tài khoản: ' + teacher.fullname);
-            this.loadData();
-            this.detailModal.hide();
+            if(teacher.error){
+              alert(teacher.error.message);
+            // this.router.navigate(['/error', id ])
+            } else {
+              alert('Chỉnh sửa thành công tài khoản: ' + teacher.fullname);
+              this.loadData();
+              this.detailModal.hide();
+            }
           },
           error => {
             alert(error);

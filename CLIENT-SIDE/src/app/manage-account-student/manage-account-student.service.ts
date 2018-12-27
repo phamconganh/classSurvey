@@ -16,7 +16,7 @@ export class ManageAccountStudentService {
 
   getAll() {
     const url = this.urlApi + appConfig.get;
-    return this.http.get<Array<any>>(url);
+    return this.http.get<any>(url);
   }
 
   getCurrent(_id){
@@ -53,7 +53,7 @@ export class ManageAccountStudentService {
 
   _delete(_id){
     const url = this.urlApi + appConfig._delete + _id;
-    return this.http.delete(url);
+    return this.http.delete<any>(url);
   }
 
 }
