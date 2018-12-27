@@ -11,10 +11,10 @@
             <button class="btn btn-primary mb-2 mr-sm-2" (click)="onCreate()"><i class="fas fa-list-ul"></i> Thêm danh muc</button>
           </td>
         </tr>
-        <tr>
+        <tr *ngFor='let setData of directories'>
           <td class='interact'>edit</td>
           <td style='width: 40%'>
-            <span class='name-directory'>Co so VC</span>
+            <span class='name-directory'>{{ setData }}</span>
           </td>
           <td>
             <button type='button' class='w-100 p-0 btn btn-outline-light btn-lg btn-block border-0 text-dark' 
