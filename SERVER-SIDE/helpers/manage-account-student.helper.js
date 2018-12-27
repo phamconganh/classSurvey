@@ -26,10 +26,7 @@ async function create(studentParam) {
     let studentCheck =  await Student.findUsername(studentParam.username);
     if (studentCheck)
         // username already exists
-        throw Error({
-            name: "Account conflict", 
-            message: 'Username "' + studentParam.username + '" is already taken'
-        })
+        throw Error('Username "' + studentParam.username + '" is already taken')
     else return await Student._create(studentParam);
 }
 
@@ -38,10 +35,7 @@ async function update(_id, studentParam) {
     if(studentCheck.username !== studentParam.username){
         let StudentCheckUsername = await Student.findUsername(studentParam.username);
         if(StudentCheckUsername)
-            throw Error({
-                name: "Account conflict", 
-                message: 'Username "' + studentParam.username + '" is already taken'
-            })
+            throw Error('Username "' + studentParam.username + '" is already taken')
         else {
             let student = await Student._update(_id, studentParam);
             return await Student.getById(_id);
