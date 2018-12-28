@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HandlerErrorComponent implements OnInit {
 
+  message = '404 - PAGE NOT FOUND';
+  subMessage = 'The page you are looking for might have been removed had its name changed or is temporarily unavailable.';
+
   constructor() { }
 
   ngOnInit() {
