@@ -1,3 +1,126 @@
-<p>
-  manage-account-teacher works!
-</p>
+<div class="container" style="margin-top: 5rem">
+  
+  <div class="row text-center">
+    <div class="col-md-4 col-lg-4  offset-md-1 offset-lg-1 title" style="font-size: 1.5em">{{description}}</div>
+    <div class="col-md-7 col-lg-7">
+      <div class="form-inline">
+        <div class="input-group mb-2 mr-sm-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text"><i class="fas fa-search"></i></div>
+          </div>
+          <input type="text" class="form-control" placeholder="Tìm kiếm" [(ngModel)]="keySearch" (keyup.enter)="onSearch()">
+        </div>
+
+        <button class="btn btn-primary mb-2 mr-sm-2" (click)="onCreate()"><i class="fas fa-address-card"></i> Thêm</button>
+        <input type="file" accept="application/vnd.*" #file hidden (change)="importFile($event)">
+        <button class="btn btn-primary mb-2 mr-sm-2" (click)="file.click()"><i class="fas fa-file-import"></i> Nhập</button>
+
+        <button class="btn btn-primary mb-2 mr-sm-2" (click)="exportFile()"><i class="fas fa-file-export"></i> Xuất</button>
+        <button class="btn btn-primary mb-2" (click)="loadData()"><i class="fas fa-sync-alt"></i></button>
+
+      </div>
+      
+    </div>
+  </div>
+
+  <ng2-smart-table [settings]="settings" [source]="source"
+    (userRowSelect)="onUserRowSelect($event)"
+    (create)="onCreate()"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></ng2-smart-table>
+
+  <div bsModal #detailModal="bs-modal"
+    class="modal fade" tabindex="-1"
+    role="dialog" aria-labelledby="detail-info"
+    (onHide)="resetValue()"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 id="detail-info" class="modal-title pull-left">Thông tin cán bộ:</h4>
+          <button type="button" class="close pull-right" (click)="detailModal.hide();" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container row">
+            <div class="col-md-3 col-lg-3 offset-md-1 offset-lg-1 text-center">
+              <img style="width:100%" alt="User Pic"  src="../../assets/img/user-icon.png">
+            </div>
+            <div class="col-md-8 col-lg-8 form-group">
+              <form (ngSubmit) = "onSubmit();" [formGroup] = "formTeacher">
+                <table class="table">
+                  <tbody *ngIf="action == TypeAction.View">
+                    <tr *ngFor="let key of objectKeyView">
+                      <td>{{teacherObject[key].title}}</td>
+                      <td *ngIf = "key != 'permission'">{{teacherObject[key].value}}</td>
+                      <td *ngIf = "key == 'permission' && teacherObject[key].value">
+                        {{selectObject[teacherObject[key].value].title}}
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody *ngIf="action != TypeAction.View">
+                    <tr *ngFor="let key of objectKey">
+                      <td>{{teacherObject[key].title}}</td>
+                      <td>
+                        <input *ngIf="teacherObject[key].type == TypeInput.Text" class="form-control" [placeholder]="teacherObject[key].title"
+                          [formControlName]="teacherObject[key].name" [value]="teacherObject[key].value" >
+                        <select *ngIf="teacherObject[key].type == TypeInput.Select" class="form-control"
+                          [formControlName]="teacherObject[key].name">
+                          <option *ngFor="let select of selectObject" [ngValue]="select.value">
+                            {{ select.title }}
+                          </option>
+                        </select>
+                        <div *ngFor="let valid of teacherObject[key].valid">
+                          <div *ngIf="formTeacher.controls[teacherObject[key].name].touched 
+                              && formTeacher.controls[teacherObject[key].name].hasError(valid.key)"
+                              class="alert alert-danger">{{valid.message}}
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="100%">
+                        <button type="submit" class="btn btn-primary float-right" [disabled] = "formTeacher.invalid"><i class="fas fa-save"> Lưu</i></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div bsModal #errInfoModal="bs-modal"
+      class="modal fade" tabindex="-1"
+      role="dialog" aria-labelledby="error-info"
+    >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 id="error-info" class="modal-title pull-left">Xảy ra lỗi trong quá trình nhập</h4>
+          <button type="button" class="close pull-right" (click)="errInfoModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container row">
+            <table class="table col-md-10 col-lg-10  offset-md-2 offset-lg-2">
+              <tbody>
+                <tr *ngFor="let err of errInfo">
+                  <td>{{err.name}}</td>
+                  <td>{{err.message}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

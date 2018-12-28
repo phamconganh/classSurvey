@@ -37,7 +37,12 @@ function getAll(req, res) {
             res.send(students);
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
 
@@ -48,7 +53,12 @@ function create(req, res) {
             res.send(student);
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
 
@@ -62,7 +72,12 @@ function getCurrent(req, res) {
             }
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
 
@@ -72,8 +87,12 @@ function update(req, res) {
             res.send(student);
         })
         .catch(function (err) {
-            console.log(err)
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });;
         });
 }
 
@@ -84,30 +103,42 @@ function importFile (req, res) {
             res.send(students);
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }
 
 function exportFile(req, res) {
-    // studentHelper.exportStudents(req.body)
-    //     .then(function () {
-    //         // res.json('success');
-    //         res.send(students);
-    //     })
-    //     .catch(function (err) {
-    //         res.status(400).send(err);
-    //     });
+    studentHelper.exportStudents()
+        .then(function (wbout) {
+            let filename = "DsTaiKhoanSinhVien.xlsx";
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', 'attachment; filename=' + filename);
+            res.type('application/octet-stream');
+            res.send(wbout);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }
 
 function find(req, res) {
-    // studentHelper.exportStudents(req.body)
-    //     .then(function () {
-    //         // res.json('success');
-    //         res.send(students);
-    //     })
-    //     .catch(function (err) {
-    //         res.status(400).send(err);
-    //     });
+    studentHelper.find(req.body.keySearch)
+        .then(function(students) {
+            res.send(students);
+        })
+        .catch(function (err) {
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 404
+                }
+            });
+        });
 }
 
 function _delete(req, res) {
@@ -116,6 +147,11 @@ function _delete(req, res) {
             res.json('Đã xóa thành công');
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            res.send({
+                error: {
+                    message: err.toString(),
+                    code: 400
+                }
+            });
         });
 }

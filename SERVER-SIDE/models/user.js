@@ -17,6 +17,7 @@ var User = new Schema({
     // active: Boolean,
     // timestamp: Date
 })
+
 User.statics.getAll = function() {
     return this.find();
 }
@@ -25,8 +26,14 @@ User.statics.getById = function(_id) {
     return this.findById(_id);
 }
 
-User.statics.findUser = function(searchParam) {
-    // let search = {$regex: '.*' + searchParam.data + '.*', $options: 'i'};
+User.statics.findUser = function(keySearch) {
+	let search = {$regex: '.*' + keySearch + '.*', $options: 'i'};
+	return this.find({$or: [
+		{code: search},
+		{username: search},
+		{vnuEmail: search},
+		{fullname: search}
+	]})
 	// let lookupUser = {
 	// 	$lookup:{
 	// 		from: 'department',
@@ -73,7 +80,7 @@ User.statics._create = function(userParam){
     // set user object to userParam without the cleartext password
     let user = userParam;
     // add hashed password to user object
-    user.password = bcrypt.hashSync(userParam.password, 10);
+    user.password = bcrypt.hashSync(userParam.password, bcrypt.genSaltSync(10));
     return this.create(user);
 }
 
@@ -81,7 +88,7 @@ User.statics._update = function( _id, userParam) {
 	let user = userParam;
 	// update password if it was entered
     if (userParam.password != null) {
-        user.password = bcrypt.hashSync(userParam.password, 10);
+        user.password = bcrypt.hashSync(userParam.password, bcrypt.genSaltSync(10));
     } else {
 		delete user.password;
 	}

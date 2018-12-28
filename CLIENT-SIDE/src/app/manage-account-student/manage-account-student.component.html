@@ -11,11 +11,11 @@
           <input type="text" class="form-control" placeholder="Tìm kiếm" [(ngModel)]="keySearch" (keyup.enter)="onSearch()">
         </div>
 
-        <button class="btn btn-primary mb-2 mr-sm-2" (click)="onCreate()"><i class="fas fa-address-card"></i>Thêm</button>
+        <button class="btn btn-primary mb-2 mr-sm-2" (click)="onCreate()"><i class="fas fa-address-card"></i> Thêm</button>
         <input type="file" accept="application/vnd.*" #file hidden (change)="importFile($event)">
-        <button class="btn btn-primary mb-2 mr-sm-2" (click)="file.click()"><i class="fas fa-file-import"></i>Nhập</button>
+        <button class="btn btn-primary mb-2 mr-sm-2" (click)="file.click()"><i class="fas fa-file-import"></i> Nhập</button>
 
-        <button class="btn btn-primary mb-2 mr-sm-2"><i class="fas fa-file-export"></i>Xuất</button>
+        <button class="btn btn-primary mb-2 mr-sm-2" (click)="exportFile()"><i class="fas fa-file-export"></i> Xuất</button>
         <button class="btn btn-primary mb-2" (click)="loadData()"><i class="fas fa-sync-alt"></i></button>
 
       </div>
@@ -64,9 +64,9 @@
                     <tr *ngFor="let key of objectKey">
                       <td>{{studentObject[key].title}}</td>
                       <td>
-                        <input *ngIf="studentObject[key].type == TypeInput.Text" class="input-group" [placeholder]="studentObject[key].title"
+                        <input *ngIf="studentObject[key].type == TypeInput.Text" class="form-control" [placeholder]="studentObject[key].title"
                           [formControlName]="studentObject[key].name" [value]="studentObject[key].value" >
-                        <select *ngIf="studentObject[key].type == TypeInput.Select" class="input-group"
+                        <select *ngIf="studentObject[key].type == TypeInput.Select" class="form-control"
                           [formControlName]="studentObject[key].name">
                           <option *ngFor="let select of selectObject" [ngValue]="select.value">
                             {{ select.title }}
@@ -82,7 +82,7 @@
                     </tr>
                     <tr>
                       <td colspan="100%">
-                        <button type="submit" class="btn btn-primary float-right" [disabled] = "formStudent.invalid"><i class="fas fa-save"></i></button>
+                        <button type="submit" class="btn btn-primary float-right" [disabled] = "formStudent.invalid"><i class="fas fa-save"> Lưu</i></button>
                       </td>
                     </tr>
                   </tbody>

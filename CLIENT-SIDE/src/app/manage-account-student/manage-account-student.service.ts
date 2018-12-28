@@ -16,7 +16,7 @@ export class ManageAccountStudentService {
 
   getAll() {
     const url = this.urlApi + appConfig.get;
-    return this.http.get<Array<any>>(url);
+    return this.http.get<any>(url);
   }
 
   getCurrent(_id){
@@ -42,16 +42,18 @@ export class ManageAccountStudentService {
   }
 
   exportFile(){
-
+    const url = this.urlApi + appConfig.exportFile;
+    return this.http.post<any>(url,{}, {'responseType': 'blob' as 'json', observe: 'response'});
   }
 
   find(key){
-
+    const url = this.urlApi + appConfig.find;
+    return this.http.post<any>(url,{keySearch: key});
   }
 
   _delete(_id){
     const url = this.urlApi + appConfig._delete + _id;
-    return this.http.delete(url);
+    return this.http.delete<any>(url);
   }
 
 }

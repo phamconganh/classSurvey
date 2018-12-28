@@ -4,10 +4,10 @@ var Schema = mongoose.Schema;
  * Schema survey
  */
 var Survey = new Schema({
-	idClassSection: {type: Schema.Types.ObjectId, ref: 'Student'},
-	createdAt: String,
-    modifiedAt: String,
+	// createdAt: String,
+    // modifiedAt: String,
     idSurveyForm: {type: Schema.Types.ObjectId, ref: 'SurveyForm'},
+    idClassSection: {type: Schema.Types.ObjectId, ref: 'ClassSection'},
     data: [String]
     // active: Boolean,
     // timestamp: Date

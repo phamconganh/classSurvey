@@ -225,22 +225,15 @@ export class ManageAccountStudentComponent implements OnInit {
       attr: {
         class: 'table table-bordered'
       },
-      // add: {
-      //   // addButtonContent: '<i class="fas fa-address-card"></i>',
-      //   // createButtonContent: '<i class="ion-checkmark"></i>',
-      //   // cancelButtonContent: '<i class="ion-close"></i>',
-      //   confirmCreate: true
-      // },
-      // edit: {
-      //   // editButtonContent: '<i class="ion-edit"></i>',
-      //   // saveButtonContent: '<i class="ion-checkmark"></i>',
-      //   // cancelButtonContent: '<i class="ion-close"></i>',
-      //   confirmSave: true
-      // },
-      // delete: {
-      //   // deleteButtonContent: '<i class="ion-trash-a"></i>',
-      //   confirmDelete: true
-      // },
+      add: {
+        addButtonContent: '<i class="fas fa-address-card"> Thêm</i>',
+      },
+      edit: {
+        editButtonContent: '<i class="fas fa-edit mr-sm-2"></i>',
+      },
+      delete: {
+        deleteButtonContent: '<i class="fas fa-trash ml-sm-2"></i>',
+      },
     };
     this.loadData();
     this.initForm();
@@ -269,12 +262,15 @@ export class ManageAccountStudentComponent implements OnInit {
   loadData(){
     this.manageAccountStudentService.getAll().subscribe(
       studentsRes => {
-        this.source.reset(false);
-        this.source.load(studentsRes);
+        if(studentsRes.error){
+          alert(studentsRes.error.message);
+        } else {
+          this.source.reset(false);
+          this.source.load(studentsRes);
+        }
       },
       error => {
-        alert(error);
-        // this.router.navigate(['/error', id ])
+        this.router.navigate(['/error'])
       }
     )
   }
@@ -310,8 +306,13 @@ export class ManageAccountStudentComponent implements OnInit {
     if(check){
       this.manageAccountStudentService._delete(event.data._id).subscribe(
         message => {
-          this.source.remove(event.data);
-          alert(message);
+          if(message.error){
+            alert(message.error.message);
+            // this.router.navigate(['/error', id ])
+          } else {
+            this.source.remove(event.data);
+            alert(message);
+          }
         },
         error => {
           alert(error);
@@ -324,16 +325,20 @@ export class ManageAccountStudentComponent implements OnInit {
   } 
 
   onSearch() {
-    // this.manageAccountStudentService.find().subscribe(
-    //   studentsRes => {
-    //     this.source.reset(false);
-    //     this.source.load(studentsRes);
-    //   },
-    //   error => {
-    //     alert(error);
-    //     // this.router.navigate(['/error', id ])
-    //   }
-    // )
+    this.manageAccountStudentService.find(this.keySearch).subscribe(
+      studentsRes => {
+        if(studentsRes.error){
+          alert(studentsRes.error.message);
+        } else {
+          this.source.reset(false);
+          this.source.load(studentsRes);
+          this.keySearch = null;
+        }
+      },
+      error => {
+        this.router.navigate(['/error'])
+      }
+    )
   }
   
   // filterData(){
@@ -358,17 +363,20 @@ export class ManageAccountStudentComponent implements OnInit {
       if(check){
         this.manageAccountStudentService.importFile(event.target.files[0]).subscribe(
           studentsRes => {
-            this.loadData();
-            if(studentsRes.dataRejects.length > 0){
-              this.errInfo = studentsRes.dataRejects;
-              this.errInfoModal.show();
+            if(studentsRes.error){
+              alert(studentsRes.error.message);
             } else {
-              alert('Thêm các sinh viên thành công');
+              this.loadData();
+              if(studentsRes.dataRejects.length > 0){
+                this.errInfo = studentsRes.dataRejects;
+                this.errInfoModal.show();
+              } else {
+                alert('Thêm các sinh viên thành công');
+              }
             }
           },
           error => {
-            alert(error.message);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       }
@@ -376,28 +384,53 @@ export class ManageAccountStudentComponent implements OnInit {
     }
   }
 
+  exportFile(){
+    this.manageAccountStudentService.exportFile().subscribe(
+      file => {
+        // console.log(file);
+        // can chinh sua ten file
+        let blob = new Blob([file.body], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        let downloadUrl= window.URL.createObjectURL(blob);
+        window.open(downloadUrl);
+      },
+      error => {
+        this.router.navigate(['/error'])
+      }
+    )
+  }
+
   onSubmit(){
     if(!this.formStudent.invalid){
       if(this.action == TypeAction.Create){
         this.manageAccountStudentService.create(this.formStudent.value).subscribe(
           student => {
-            alert('Tạo thành công tài khoản: ' + student.fullname);
-            this.detailModal.hide();
+            if(student.error){
+              alert(student.error.message);
+            } else {
+              alert('Tạo thành công tài khoản: ' + student.fullname);
+              this.loadData();
+              this.detailModal.hide();
+            }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       } else if(this.action == TypeAction.Edit){
         this.manageAccountStudentService.update(this.studentObject['_id'].value, this.formStudent.value).subscribe(
           student => {
-            alert('Chỉnh sửa thành công tài khoản: ' + student.fullname);
-            this.detailModal.hide();
+            if(student.error){
+              alert(student.error.message);
+            } else {
+              alert('Chỉnh sửa thành công tài khoản: ' + student.fullname);
+              this.loadData();
+              this.detailModal.hide();
+            }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       }

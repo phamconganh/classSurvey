@@ -8,10 +8,11 @@ var app = express();
 /*
     Import Route route
 */
+var login = require('./routes/login.route');
 // var anwserSurvey = require('./routes/anwser-survey.route');
 var manageAccountStudent = require('./routes/manage-account-student.route');
-// var manageAccountTeacher = require('./routes/manage-account-teacher.route');
-// var manageSurveyClass = require('./routes/manage-survey-class.route');
+var manageAccountTeacher = require('./routes/manage-account-teacher.route');
+var manageSurveyClass = require('./routes/manage-survey-class.route');
 // var manageSurvey = require('./routes/manage-survey.route');
 // var viewResult = require('./routes/view-result.route');
 //  End import
@@ -19,7 +20,7 @@ var manageAccountStudent = require('./routes/manage-account-student.route');
 /*
     Import middleware
 */
-// var middlewareToken = require('./middlewares/token');
+var authenticate = require('./middlewares/authentication.middleware');
 //  End import middleware
 
 /*
@@ -38,7 +39,7 @@ app.use(bodyParser.json()); // => cho truy cap req.body
 /**allow other ip access */
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With');
+  res.header('Access-Control-Allow-Headers', '*');
   res.header('Access-Control-Allow-Methods', "*");
   next();
 });
@@ -47,25 +48,18 @@ app.use((req, res, next) => {
 // app.use(express.static(path.join(__dirname, 'public')));
 
 
+
 /*
     Route route which should handle request
 */
+app.use('/api/login', login);
 // app.use('/api/anwserSurvey', anwserSurvey);
-app.use('/api/manageAccountStudent', manageAccountStudent);
-// app.use('/api/manageAccountTeacher', manageAccountTeacher);
-// app.use('/api/manageSurveyClass', manageSurveyClass);
+app.use('/api/manageAccountStudent', authenticate, manageAccountStudent);
+app.use('/api/manageAccountTeacher', authenticate, manageAccountTeacher);
+app.use('/api/manageSurveyClass', authenticate, manageSurveyClass);
 // app.use('/api/manageSurvey', manageSurvey);
 // app.use('/api/viewResult', viewResult);
 //  End route
-
-/*
-    Middleware use
-*/
-// app.use(middlewareToken, function(req, res, next) {
-//     // next(createError(404));
-//     res.render('pages/error',
-//         { objectType: req.objectType, message: 'Not found!', codeError: 404});
-// });
 
 /*
     Error handler

@@ -34,35 +34,86 @@ function readStudents(file){
     }
 }
 
-function writeStudents(){
-
+function writeStudents(data){
+    /* create workbook & set props*/
+    dataWrite = [];
+    for (let index = 0; index < data.length; index++) {
+        let element = data[index];
+        let jsonData = {
+            "STT": index + 1,
+            "Mã sinh viên/Tên đăng nhập": element.code,
+            "Mật khẩu": "",
+            "Họ và tên": element.fullname,
+            "VNU email": element.vnuEmail,
+            "Khóa đào tạo": element.class,
+            "Tên đăng nhập chỉnh sửa": element.username
+        }
+        dataWrite.push(jsonData);
+    }
+    const wb = { SheetNames: [], Sheets: {} };
+    wb.Props = {
+        Title: "Danh sách tài khoản sinh viên"
+    };
+    /*create sheet data & add to workbook*/
+    var ws = XLSX.utils.json_to_sheet(dataWrite);
+    var ws_name = "Danh sách tài khoản sinh viên";
+    XLSX.utils.book_append_sheet(wb, ws, ws_name);
+    /* create file 'in memory' */
+    var wbout = new Buffer(XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' }));
+    return wbout;
 }
 
-function readTeachers(){
+function readTeachers(file){
     try {
         let teacherConfig = CONFIG.teachers;
-        let workbook = XLSX.readFile('./../ds_tai_khoan_canbo.xlsx');
+        let workbook = XLSX.read(file)
         let sheet_name_list = workbook.SheetNames;
         let sheet = workbook.Sheets[sheet_name_list[0]];
         let range = sheet['!ref'];
         let rangeSet = teacherConfig.rangeStart + ':' + range.split(':')[1];
-        return XLSX.utils.sheet_to_json(sheet, {range: rangeSet, header: teacherConfig.header})
+        let data = XLSX.utils.sheet_to_json(sheet, {range: rangeSet, header: teacherConfig.header})
+        for (let index = 0; index < data.length; index++) {
+            for(let key of Object.keys(data[index])){
+                data[index][key] = data[index][key].toString().trim();
+            }
+        }
+        return Promise.resolve(data);
     } catch (error) {
-        throw error
+        return Promise.reject(error);
     }
 }
 
-function writeTeachers(){
-    let workbook = XLSX.readFile('./../ds_tai_khoan_canbo.xlsx');
-    const sheet_name_list = workbook.SheetNames;
-    // console.log(sheet_name_list);
-    console.log(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]))
+function writeTeachers(data){
+    /* create workbook & set props*/
+    dataWrite = [];
+    for (let index = 0; index < data.length; index++) {
+        let element = data[index];
+        let jsonData = {
+            "STT": index + 1,
+            "Tên đăng nhập": element.username,
+            "Mật khẩu": "",
+            "Họ và tên": element.fullname,
+            "VNU email": element.vnuEmail
+        }
+        dataWrite.push(jsonData);
+    }
+    const wb = { SheetNames: [], Sheets: {} };
+    wb.Props = {
+        Title: "Danh sách tài khoản cán bộ"
+    };
+    /*create sheet data & add to workbook*/
+    var ws = XLSX.utils.json_to_sheet(dataWrite);
+    var ws_name = "Danh sách tài khoản cán bộ";
+    XLSX.utils.book_append_sheet(wb, ws, ws_name);
+    /* create file 'in memory' */
+    var wbout = new Buffer(XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' }));
+    return wbout;
 }
 
-function readClassSections(){
+function readClassSections(file){
     try {
         let vector = CONFIG.classSectionsVector;
-        let workbook = XLSX.readFile('./../Danh_sach_sinh_vien_lop_mon_hoc.xlsx');
+        let workbook = XLSX.read(file);
         let sheet_name_list = workbook.SheetNames;
         let sheet = workbook.Sheets[sheet_name_list[0]];
         let range = XLSX.utils.decode_range(sheet['!ref']);
@@ -98,4 +149,3 @@ function readSurveyForm(){
 function writeResult(){
 
 }
-// console.log(XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]))
