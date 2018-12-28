@@ -80,7 +80,7 @@ User.statics._create = function(userParam){
     // set user object to userParam without the cleartext password
     let user = userParam;
     // add hashed password to user object
-    user.password = bcrypt.hashSync(userParam.password, 10);
+    user.password = bcrypt.hashSync(userParam.password, bcrypt.genSaltSync(10));
     return this.create(user);
 }
 
@@ -88,7 +88,7 @@ User.statics._update = function( _id, userParam) {
 	let user = userParam;
 	// update password if it was entered
     if (userParam.password != null) {
-        user.password = bcrypt.hashSync(userParam.password, 10);
+        user.password = bcrypt.hashSync(userParam.password, bcrypt.genSaltSync(10));
     } else {
 		delete user.password;
 	}

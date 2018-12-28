@@ -64,9 +64,9 @@
                     <tr *ngFor="let key of objectKey">
                       <td>{{studentObject[key].title}}</td>
                       <td>
-                        <input *ngIf="studentObject[key].type == TypeInput.Text" class="input-group" [placeholder]="studentObject[key].title"
+                        <input *ngIf="studentObject[key].type == TypeInput.Text" class="form-control" [placeholder]="studentObject[key].title"
                           [formControlName]="studentObject[key].name" [value]="studentObject[key].value" >
-                        <select *ngIf="studentObject[key].type == TypeInput.Select" class="input-group"
+                        <select *ngIf="studentObject[key].type == TypeInput.Select" class="form-control"
                           [formControlName]="studentObject[key].name">
                           <option *ngFor="let select of selectObject" [ngValue]="select.value">
                             {{ select.title }}

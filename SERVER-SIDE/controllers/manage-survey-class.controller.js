@@ -15,24 +15,8 @@ controller._delete = _delete;
 
 module.exports = controller;
 
-// function authenticate(req, res) {
-//      teacherHelper.authenticate(req.body.username, req.body.password)
-//         .then(function (user) {
-//             if (user) {
-//                 // authentication successful
-//                 res.send(user);
-//             } else {
-//                 // authentication failed
-//                 res.status(400).send('Username or password is incorrect');
-//             }
-//         })
-//         .catch(function (err) {
-//             res.status(400).send(err);
-//         });
-// }
-
 function getAll(req, res) {
-    surveyClassHelper.getAll(req.param)
+    surveyClassHelper.getAll(req.paramAuth)
         .then(function(classSurvey) {
             res.send(classSurvey);
         })
@@ -63,8 +47,8 @@ function updateByImport(req, res) {
 }
 
 function getCurrent(req, res) {
-    req.param._id = req.params._id;
-    surveyClassHelper.getById(req.param)
+    req.paramAuth._id = req.params._id;
+    surveyClassHelper.getById(req.paramAuth)
         .then(function(classSurvey) {
             if (classSurvey) {
                 res.send(classSurvey);
@@ -83,7 +67,7 @@ function getCurrent(req, res) {
 }
 
 function update(req, res) {
-    if(req.param.permission == permission.admin){
+    if(req.paramAuth.permission == permission.admin){
         surveyClassHelper.update(req.body)
             .then(function (surveyClass) {
                 res.send(surveyClass);
@@ -106,7 +90,7 @@ function update(req, res) {
 }
 
 function importFile(req, res) {
-    if(req.param.permission == permission.admin){
+    if(req.paramAuth.permission == permission.admin){
         surveyClassHelper.importSurveyClass(req.file.buffer)
             .then(function (surveyClass) {
                 res.send(surveyClass);
@@ -143,8 +127,8 @@ function importFile(req, res) {
 // }
 
 function find(req, res) {
-    req.param.keySearch = req.body.keySearch;
-    surveyClassHelper.find(req.param)
+    req.paramAuth.keySearch = req.body.keySearch;
+    surveyClassHelper.find(req.paramAuth)
         .then(function(surveyClass) {
             res.send(surveyClass);
         })
@@ -159,7 +143,7 @@ function find(req, res) {
 }
 
 function _delete(req, res) {
-    if(req.param.permission == permission.admin){
+    if(req.paramAuth.permission == permission.admin){
         surveyClassHelper._delete(req.params.id)
         .then(function () {
             res.json('Đã xóa thành công');

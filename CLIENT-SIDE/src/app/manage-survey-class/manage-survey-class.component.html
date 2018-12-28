@@ -1,4 +1,4 @@
-<div class="container" style="margin-top: 5rem">
+<div class="container" style="margin-top: 2rem">
   
   <div class="row text-center">
     <div class="col-md-5 col-lg-5  offset-md-1 offset-lg-1 title" style="font-size: 1.5em">{{description}}</div>
@@ -11,11 +11,9 @@
           <input type="text" class="form-control" placeholder="Tìm kiếm" [(ngModel)]="keySearch" (keyup.enter)="onSearch()">
         </div>
 
-        <!-- <button class="btn btn-primary mb-2 mr-sm-2" (click)="onUpdateByImport()"><i class="fas fa-address-card"></i>Sửa</button> -->
-        <input type="file" accept="application/vnd.*" #file hidden (change)="importFile($event)">
-        <button class="btn btn-primary mb-2 mr-sm-2" (click)="file.click()"><i class="fas fa-file-import"></i> Nhập</button>
+        <input *ngIf="permissionObject == Permission.Admin" type="file" accept="application/vnd.*" #file hidden (change)="importFile($event)">
+        <button *ngIf="permissionObject == Permission.Admin" class="btn btn-primary mb-2 mr-sm-2" (click)="file.click()"><i class="fas fa-file-import"></i> Nhập</button>
 
-        <!-- <button class="btn btn-primary mb-2 mr-sm-2" (click)="exportFile()"><i class="fas fa-file-export"></i>Xuất</button> -->
         <button class="btn btn-primary mb-2" (click)="loadData()"><i class="fas fa-sync-alt"></i></button>
 
       </div>
@@ -48,7 +46,7 @@
             <div class="col-md-3 col-lg-3 offset-md-1 offset-lg-1 text-center">
               <img style="width:100%" alt="User Pic"  src="../../assets/img/user-icon.png">
               <br><br><br>
-              <div class="btn btn-primary mb-2"><i class="fas fa-poll-h"></i> Khảo sát</div>
+              <div class="btn btn-primary mb-2" (click)="onSurvey()"><i class="fas fa-poll-h"></i> Khảo sát</div>
             </div>
             <div class="col-md-8 col-lg-8 form-group">
               <form (ngSubmit) = "onSubmit();" [formGroup] = "formSurveyClass">
@@ -59,11 +57,11 @@
                       <td>{{surveyClassObject[key].value}}</td>
                     </tr>
                   </tbody>
-                  <tbody *ngIf="action == TypeAction.Edit">
+                  <tbody *ngIf="action == TypeAction.Edit && permissionObject == Permission.Admin">
                     <tr *ngFor="let key of objectKey">
                       <td>{{surveyClassObject[key].title}}</td>
                       <td>
-                        <input class="input-group" [placeholder]="surveyClassObject[key].title"
+                        <input class="form-control" [placeholder]="surveyClassObject[key].title"
                           [formControlName]="surveyClassObject[key].name" [value]="surveyClassObject[key].value" >
                         <div *ngFor="let valid of surveyClassObject[key].valid">
                           <div *ngIf="formSurveyClass.controls[surveyClassObject[key].name].touched 

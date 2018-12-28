@@ -1,5 +1,6 @@
 export const appConfig = {
     apiUrl: 'http://localhost:3000/api',
+    login: '/login',
     student: '/manageAccountStudent',
     teacher: '/manageAccountTeacher',
     surveyClass: '/manageSurveyClass',
