@@ -232,15 +232,13 @@ export class ManageAccountTeacherComponent implements OnInit {
       teachersRes => {
         if(teachersRes.error){
           alert(teachersRes.error.message);
-        // this.router.navigate(['/error', id ])
         } else {
           this.source.reset(false);
           this.source.load(teachersRes);
         }
       },
       error => {
-        alert(error);
-        // this.router.navigate(['/error', id ])
+        this.router.navigate(['/error'])
       }
     )
   }
@@ -278,15 +276,13 @@ export class ManageAccountTeacherComponent implements OnInit {
         message => {
           if(message.error){
             alert(message.error.message);
-          // this.router.navigate(['/error', id ])
           } else {
             this.source.remove(event.data);
             alert(message);
           }
         },
         error => {
-          alert(error);
-          // this.router.navigate(['/error', id ])
+          this.router.navigate(['/error'])
         }
       )
     } else {
@@ -299,7 +295,6 @@ export class ManageAccountTeacherComponent implements OnInit {
       teachersRes => {
         if(teachersRes.error){
           alert(teachersRes.error.message);
-        // this.router.navigate(['/error', id ])
         } else {
           this.source.reset(false);
           this.source.load(teachersRes);
@@ -307,8 +302,7 @@ export class ManageAccountTeacherComponent implements OnInit {
         }
       },
       error => {
-        alert(error);
-        // this.router.navigate(['/error', id ])
+        this.router.navigate(['/error'])
       }
     )
   }
@@ -321,7 +315,6 @@ export class ManageAccountTeacherComponent implements OnInit {
           teachersRes => {
             if(teachersRes.error){
               alert(teachersRes.error.message);
-            // this.router.navigate(['/error', id ])
             } else {
               this.loadData();
               if(teachersRes.dataRejects.length > 0){
@@ -333,8 +326,7 @@ export class ManageAccountTeacherComponent implements OnInit {
             }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       }
@@ -354,8 +346,7 @@ export class ManageAccountTeacherComponent implements OnInit {
         window.open(downloadUrl);
       },
       error => {
-        alert(error);
-        // this.router.navigate(['/error', id ])
+        this.router.navigate(['/error'])
       }
     )
   }
@@ -367,7 +358,6 @@ export class ManageAccountTeacherComponent implements OnInit {
           teacher => {
             if(teacher.error){
               alert(teacher.error.message);
-            // this.router.navigate(['/error', id ])
             } else {
               alert('Tạo thành công tài khoản: ' + teacher.fullname);
               this.loadData();
@@ -375,8 +365,7 @@ export class ManageAccountTeacherComponent implements OnInit {
             }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       } else if(this.action == TypeAction.Edit){
@@ -384,7 +373,6 @@ export class ManageAccountTeacherComponent implements OnInit {
           teacher => {
             if(teacher.error){
               alert(teacher.error.message);
-            // this.router.navigate(['/error', id ])
             } else {
               alert('Chỉnh sửa thành công tài khoản: ' + teacher.fullname);
               this.loadData();
@@ -392,8 +380,7 @@ export class ManageAccountTeacherComponent implements OnInit {
             }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       }

@@ -232,7 +232,6 @@ export class ManageSurveyClassComponent implements OnInit {
       }; 
     } else {
       this.router.navigate(['/error'])
-      // sang trang handler error
     }
 
   }
@@ -261,16 +260,14 @@ export class ManageSurveyClassComponent implements OnInit {
     this.manageSurveyClassService.getAll().subscribe(
       classSurvey => {
         if(classSurvey.error){
-          alert(classSurvey.error.message)
-          // handler error
+          alert(classSurvey.error.message);
         } else{
           this.source.reset(false);
           this.source.load(classSurvey);
         }
       },
       error => {
-        alert(error);
-        // this.router.navigate(['/error', id ])
+        this.router.navigate(['/error'])
       }
     )
   }
@@ -315,7 +312,6 @@ export class ManageSurveyClassComponent implements OnInit {
           classSurvey => {
             if(classSurvey.error){
               alert(classSurvey.error.message);
-              // this.router.navigate(['/error', id ])
             } else {
               this.detailModal.hide();
               this.loadData();
@@ -326,8 +322,7 @@ export class ManageSurveyClassComponent implements OnInit {
             }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       }
@@ -353,15 +348,13 @@ export class ManageSurveyClassComponent implements OnInit {
         message => {
           if(message.error){
             alert(message.error.message)
-            // handler error
           } else{
             this.source.remove(event.data);
             alert(message);
           }
         },
         error => {
-          alert(error);
-          // this.router.navigate(['/error', id ])
+          this.router.navigate(['/error'])
         }
       )
     } else {
@@ -373,8 +366,7 @@ export class ManageSurveyClassComponent implements OnInit {
     this.manageSurveyClassService.find(this.keySearch).subscribe(
       classSurvey => {
         if(classSurvey.error){
-          alert(classSurvey.error.message)
-          // handler error
+          alert(classSurvey.error.message);
         } else{
           this.source.reset(false);
           this.source.load(classSurvey);
@@ -382,8 +374,7 @@ export class ManageSurveyClassComponent implements OnInit {
         }
       },
       error => {
-        alert(error);
-        // this.router.navigate(['/error', id ])
+        this.router.navigate(['/error'])
       }
     )
   }
@@ -396,7 +387,6 @@ export class ManageSurveyClassComponent implements OnInit {
           classSurvey => {
             if(classSurvey.error){
               alert(classSurvey.error.message);
-              // this.router.navigate(['/error', id ])
             } else {
               this.loadData();
               alert('Thêm lớp môn học: ' + 
@@ -406,8 +396,7 @@ export class ManageSurveyClassComponent implements OnInit {
             }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       }
@@ -439,7 +428,6 @@ export class ManageSurveyClassComponent implements OnInit {
         classSurvey => {
           if(classSurvey.error){
             alert(classSurvey.error.message);
-            // this.router.navigate(['/error', id ])
           } else {
             alert('Chỉnh sửa thành công lớp môn học: ' + 
                 classSurvey.code + ' - ' + 
@@ -450,8 +438,7 @@ export class ManageSurveyClassComponent implements OnInit {
           }
         },
         error => {
-          alert(error);
-          // this.router.navigate(['/error', id ])
+          this.router.navigate(['/error'])
         }
       )
     }

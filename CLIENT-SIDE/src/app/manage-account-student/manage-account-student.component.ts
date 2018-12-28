@@ -264,15 +264,13 @@ export class ManageAccountStudentComponent implements OnInit {
       studentsRes => {
         if(studentsRes.error){
           alert(studentsRes.error.message);
-        // this.router.navigate(['/error', id ])
         } else {
           this.source.reset(false);
           this.source.load(studentsRes);
         }
       },
       error => {
-        alert(error);
-        // this.router.navigate(['/error', id ])
+        this.router.navigate(['/error'])
       }
     )
   }
@@ -331,7 +329,6 @@ export class ManageAccountStudentComponent implements OnInit {
       studentsRes => {
         if(studentsRes.error){
           alert(studentsRes.error.message);
-          // this.router.navigate(['/error', id ])
         } else {
           this.source.reset(false);
           this.source.load(studentsRes);
@@ -339,8 +336,7 @@ export class ManageAccountStudentComponent implements OnInit {
         }
       },
       error => {
-        alert(error);
-        // this.router.navigate(['/error', id ])
+        this.router.navigate(['/error'])
       }
     )
   }
@@ -369,7 +365,6 @@ export class ManageAccountStudentComponent implements OnInit {
           studentsRes => {
             if(studentsRes.error){
               alert(studentsRes.error.message);
-              // this.router.navigate(['/error', id ])
             } else {
               this.loadData();
               if(studentsRes.dataRejects.length > 0){
@@ -381,8 +376,7 @@ export class ManageAccountStudentComponent implements OnInit {
             }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       }
@@ -402,8 +396,7 @@ export class ManageAccountStudentComponent implements OnInit {
         window.open(downloadUrl);
       },
       error => {
-        alert(error);
-        // this.router.navigate(['/error', id ])
+        this.router.navigate(['/error'])
       }
     )
   }
@@ -415,7 +408,6 @@ export class ManageAccountStudentComponent implements OnInit {
           student => {
             if(student.error){
               alert(student.error.message);
-              // this.router.navigate(['/error', id ])
             } else {
               alert('Tạo thành công tài khoản: ' + student.fullname);
               this.loadData();
@@ -423,8 +415,7 @@ export class ManageAccountStudentComponent implements OnInit {
             }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       } else if(this.action == TypeAction.Edit){
@@ -432,7 +423,6 @@ export class ManageAccountStudentComponent implements OnInit {
           student => {
             if(student.error){
               alert(student.error.message);
-              // this.router.navigate(['/error', id ])
             } else {
               alert('Chỉnh sửa thành công tài khoản: ' + student.fullname);
               this.loadData();
@@ -440,8 +430,7 @@ export class ManageAccountStudentComponent implements OnInit {
             }
           },
           error => {
-            alert(error);
-            // this.router.navigate(['/error', id ])
+            this.router.navigate(['/error'])
           }
         )
       }
