@@ -9,6 +9,10 @@
         "teacher": 1,
         "student": 2
     },
+    "type": {
+        "default": 0,
+        "custom": 1
+    },
     "classSectionsVector": {
         "semester": {
             "r": 4, "c": 0

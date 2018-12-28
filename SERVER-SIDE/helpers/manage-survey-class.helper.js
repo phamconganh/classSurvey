@@ -102,6 +102,7 @@ function find(param){
 }
 
 async function _delete(_id) {
+    // await SurveyForm.deleteMany({idClassSection: _id});
     await Survey.deleteMany({idClassSection: _id});
     let classSectionDelete = await ClassSection.deleteOne({_id: _id});
     if(classSectionDelete.n > 0){
