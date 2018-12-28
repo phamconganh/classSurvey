@@ -1,3 +1,55 @@
-<p>
-  anwser-survey works!
-</p>
+
+<div class="container" style='margin-top: 5rem'>
+    <h1 style='display: iline-block'>Phieu danh gia mon hoc <strong>{{ data.idClassSection.name }}</strong></h1>
+  
+    <table class="table list-directory">
+      <tbody>
+        <!-- <tr *ngFor='let setData of data.directories'> -->
+        <tr *ngFor='let sections of data.survey'>
+          <td>
+            <table class='table'>
+              <tr>
+                  <td style='width: 100%'>
+                    <span class='name-directory'>{{ sections.section }}</span>
+                  </td>
+              </tr>
+              <tr>
+                  <td colspan="3" style="padding: 0px; padding-left: 100px;">
+                    <table class= 'table list-query'>
+                      <tr *ngFor='let query of sections.dataSection'>
+                        <td>
+                          <span class='name-query'>{{ query.question }}</span>
+                        </td>
+                        <td>
+                          <fieldset class="rating">
+                            <input type="radio" [name]="inputName" value="5" [checked]="rating===5" />
+                            <label title="Rocks!" (click)='onClickx(5, 1)'>5 stars</label>
+                          
+                            <input type="radio" [name]="inputName" value="4" [checked]="rating===4" />
+                            <label title="Pretty good" (click)='onClickx(4, 1)'>4 stars</label>
+                          
+                            <input type="radio" [name]="inputName" value="3" [checked]="rating===3" />
+                            <label title="Meh" (click)='onClickx(3, 1)'>3 stars</label>
+                          
+                            <input type="radio" [name]="inputName" value="2" [checked]="rating===2" />
+                            <label title="Kinda bad" (click)='onClickx(2, 1)'>2 stars</label>
+                          
+                            <input type="radio" [name]="inputName" value="1" [checked]="rating===1" />
+                            <label title="Sucks big time" (click)='onClickx(1, 1)'>1 star</label>
+                          </fieldset>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="100%">
+            <button class='btn btn-primary mb-2 mr-sm-2'>Xac nhan</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div> 

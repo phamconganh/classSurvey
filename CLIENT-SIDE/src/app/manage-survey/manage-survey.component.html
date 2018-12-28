@@ -1,57 +1,91 @@
 
 <div class="container" style='margin-top: 5rem'>
-  <h1 style='display: iline-block'>Phieu danh gia mon hoc {{ data.nameSubject}} </h1>
+  <h1 style='display: iline-block'>Phieu danh gia mon hoc {{ data.idClassSection.name }}</h1>
 
   <button class='btn btn-primary mb-2 mr-sm-2 float-right'><i class="fas fa-sync-alt"></i> Khoi phuc mac dich</button>
 
   <table class="table list-directory">
-      <tbody>
-        <tr>
-          <td colspan="100%">
-            <button class="btn btn-primary mb-2 mr-sm-2" (click)="onCreate()"><i class="fas fa-list-ul"></i> Thêm danh muc</button>
-          </td>
-        </tr>
-        <tr *ngFor='let setData of directories'>
-          <td class='interact'>edit</td>
-          <td style='width: 40%'>
-            <span class='name-directory'>{{ setData }}</span>
-          </td>
-          <td>
-            <button type='button' class='w-100 p-0 btn btn-outline-light btn-lg btn-block border-0 text-dark' 
-                (click)="show = !show"><span>{{show ?  'An di' : 'Hien chi tiet'}} <i class="{{show ?  'fas fa-caret-up' : 'fas fa-caret-down'}} fa-lg"></i></span></button>
-          </td>
-        </tr>
-        <tr *ngIf="show">
-          <td colspan="3" style="padding: 0px; padding-left: 100px;">
-            <table class= 'table list-query'>
+    <tbody>
+      <tr>
+        <td colspan="100%">
+          <button class="btn btn-primary mb-2 mr-sm-2" (click)="onCreate()"><i class="fas fa-list-ul"></i> Thêm danh muc</button>
+        </td>
+      </tr>
+      <tr *ngFor='let setData of data.survey'>
+        <td>
+          <table class='table'>
+            <tr>
+                <td class='interact'><span (click)="editNameSection()">Sua ten</span></td>
+                <td style='width: 40%'>
+                  <span class='name-directory'>{{ setData.section }}</span>
+                </td>
+                <td>
+                  <button type='button' class='w-100 p-0 btn btn-outline-light btn-lg btn-block border-0 text-dark' 
+                      (click)="show = !show"><span>{{show ?  'An di' : 'Hien chi tiet'}} <i class="{{show ?  'fas fa-caret-up' : 'fas fa-caret-down'}} fa-lg"></i></span></button>
+                </td>
+            </tr>
+            <tr *ngIf="show">
+              <td colspan="3" style="padding: 0px; padding-left: 100px;">
+                <table class= 'table list-query'>
+                  <tr>
+                    <td colspan="3">
+                      <button class='btn btn-primary mb-2 mr-sm-2' (click)='onCreateQuery()'><i class="fas fa-plus-circle"></i> Them cau hoi</button>
+                    </td>
+                  </tr>
+                  <tr *ngFor='let listQuery of setData.dataSection'>
+                    <td class='interact'>edit | delete</td>
+                    <td>
+                      <span class='name-query'>{{ listQuery.question }}</span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div> 
+
+<div bsModal #nameSectionModal='bs-modal'
+  class='modal fade' tabindex='-1'
+  role='dialog' aria-labelledby="detail-info"
+  (onHide)='resetValue()'
+>
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4>Chinh sua ten danh muc</h4>
+      <button type="button" class="close pull-right" (click)="nameSectionModal.hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class='modal-body'>
+      <form (ngSubmit)='onSubmitNameSection();' [formGroup]="formSurvey">
+        <table class="table">
+            <tbody>
               <tr>
-                <td colspan="3">
-                  <button class='btn btn-primary mb-2 mr-sm-2' (click)='onCreateQuery()'><i class="fas fa-plus-circle"></i> Them cau hoi</button>
+                <td>
+                  <label>Ten danh muc: </label>
+                </td>
+                <td>
+                    <input class="input-group" type='text' 
+                    formControlName="editName"
+                    placeholder="ten danh muc" />
                 </td>
               </tr>
               <tr>
-                <td class='interact'>edit | delete</td>
-                <td>
-                  <span class='name-query'>So luong giang duong phu hop</span>
-                </td>
-                <td>
-                  <span>Chon diem danh gia</span>
+                <td colspan="100%">
+                  <button type="submit" class="btn btn-primary float-right" ><i class="fas fa-save"></i></button>
                 </td>
               </tr>
-              <tr>
-                <td class='interact'>edit | delete</td>
-                <td>
-                  <span class='name-query'>Chat luong giang duong</span>
-                </td>
-                <td>
-                  <span>Chon diem danh gia</span>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </tbody>
+          </table>
+        </form> 
+      </div>
+    </div>
+  </div>
 </div>
 
 <div bsModal #detailModal="bs-modal"
@@ -68,7 +102,7 @@
             </button>
         </div>
         <div class='modal-body'>
-          <form (ngSubmit)='onSubmit();'>
+          <form (ngSubmit)='onSubmit();' [formGroup] = "formSurvey">
               <table class="table">
                   <tbody>
                     <tr>
@@ -76,7 +110,9 @@
                         <label>Ten danh muc: </label>
                       </td>
                       <td>
-                          <input class="input-group" type='text' placeholder="ten danh muc" />
+                          <input class="input-group" type='text' 
+                          formControlName="test"
+                          placeholder="ten danh muc" />
                       </td>
                     </tr>
                     <tr>
@@ -90,7 +126,6 @@
         </div>
       </div>
     </div>
-
 </div>
 
 
@@ -108,7 +143,7 @@
             </button>
         </div>
         <div class='modal-body'>
-          <form (ngSubmit)='onSubmit();'>
+          <form (ngSubmit)='onQuerySubmit();'>
               <table class="table">
                   <tbody>
                     <tr>
@@ -116,7 +151,13 @@
                         <label>Noi dung cau hoi: </label>
                       </td>
                       <td>
-                          <input type='text' class="input-group" placeholder="Noi dung cau hoi" />
+                          <input 
+                          type='text' 
+                          class="input-group" 
+                          placeholder="Noi dung cau hoi" 
+                          class="input-group" type='text' 
+                          formControlName="query"
+                          />
                       </td>
                     </tr>
                     <tr>
@@ -126,8 +167,7 @@
                       <td>
                         <select class="form-control">
                             <option>Danh gia diem</option>
-                            <option>Tra loi ngan</option>
-                          </select>
+                        </select>
                       </td>
                     </tr>
                     <tr>
