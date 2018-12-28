@@ -4,7 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ManageSurveyClassService } from "./manage-survey-class.service";
 import { Router } from "@angular/router";
 import { LocalDataSource } from "ng2-smart-table";
-import { TypeAction, TypeValid } from "../app.entity";
+import { TypeAction, TypeValid, Permission, loadToken, loadPermission } from "../app.entity";
 
 @Component({
   selector: 'app-manage-survey-class',
@@ -14,6 +14,7 @@ import { TypeAction, TypeValid } from "../app.entity";
 
 export class ManageSurveyClassComponent implements OnInit {
 
+  Permission = Permission;
   TypeAction = TypeAction;
   TypeValid = TypeValid;
 
@@ -41,180 +42,199 @@ export class ManageSurveyClassComponent implements OnInit {
   objectKey: Array<string>;
   objectKeyView: Array<string>;
 
+  permissionObject;
+
   ngOnInit() {
-    this.action = TypeAction.View;
-    this.description = "Quản lý các lớp môn học";
+    this.permissionObject = loadPermission();
+    if(this.permissionObject in Permission){
+      this.action = TypeAction.View;
 
-    this.surveyClassObject = {
-      _id: {
-        name: "_id",
-        value: "",
-      },
-      code: {
-        title: "Mã lớp môn học",
-        name: "code",
-        value: "",
-        valid: [{
-          key: TypeValid.Pattern,
-          message: "Mã lớp môn học không đúng định dạng"
-        }],
-        validators: [
-          Validators.required,
-          Validators.pattern('^[a-zA-Z0-9\\s]+$')
-        ]
-      },
-      name: {
-        title: "Tên lớp môn học",
-        name: "name",
-        value: "",
-        valid: [{
-          key: TypeValid.Pattern,
-          message: "Tên lớp môn học không đúng định dạng"
-        }],
-        validators: [
-          Validators.required,
-          Validators.pattern(
-            "^[A-Za-z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" +
-            "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểễếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" +
-            "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$"
-          )
-        ]
-      },
-      semester: {
-        title: "Học kỳ",
-        name: "semester",
-        value: "",
-        valid: [{
-          key: TypeValid.Pattern,
-          message: "Tên học kỳ không đúng định dạng"
-        }],
-        validators: [
-          Validators.required,
-          Validators.pattern(
-            "^[A-Za-z0-9-_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" +
-            "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểễếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" +
-            "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$"
-          )
-        ]
-      },
-      idTeacher: {
-        title: "Mã giáo viên",
-        name: "idTeacher",
-        value: "",
-        valid: [{
-          key: TypeValid.Pattern,
-          message: "Mã giáo viên không đúng định dạng"
-        }],
-        validators: [
-          Validators.required,
-          Validators.pattern('^[a-zA-Z0-9]+$')
-        ]
-      },
-      time: {
-        title: "Thời gian",
-        name: "time",
-        value: "",
-        valid: [/*{
-          key: TypeValid.Pattern,
-          message: "Thời gian không đúng định dạng"
-        }*/],
-        validators: [
-          Validators.required,
-          // Validators.pattern('[\/A-Za-z0-9_-]+$')
-        ]
-      },
-      location: {
-        title: "Vị trí",
-        name: "location",
-        value: "",
-        valid: [{
-          key: TypeValid.Pattern,
-          message: "Vị trí không đúng định dạng"
-        }],
-        validators: [
-          Validators.required,
-          Validators.pattern('[\/A-Za-z0-9_-]+$')
-        ]
-      },
-      creditNumber: {
-        title: "Số tín chỉ",
-        name: "creditNumber",
-        value: "",
-        valid: [{
-          key: TypeValid.Pattern,
-          message: "Số tín chỉ không đúng định dạng"
-        }],
-        validators: [
-          Validators.required,
-          Validators.pattern('[0-9]+$')
-        ]
+      this.settings = {
+        mode: 'external',
+        columns: {
+          code: {
+            title: 'Mã lớp môn học',
+            width: '25%'
+          },
+          name: {
+            title: 'Tên lớp môn học',
+            width: '30%'
+          },
+          teacher: {
+            title: 'Tên giáo viên',
+            width: '25%',
+            valuePrepareFunction: (value) => { 
+              return value[0].fullname;
+            }
+          }
+        },
+        pager: {
+          perPage: 5
+        },
+        attr: {
+          class: 'table table-bordered'
+        },
+        add: {
+          addButtonContent: '<i class="fas fa-file-import"> Nhập</i>',
+        },
+        edit: {
+          editButtonContent: '<i class="fas fa-edit mr-sm-2"></i>',
+        },
+        delete: {
+          deleteButtonContent: '<i class="fas fa-trash ml-sm-2"></i>',
+        },
+      };
+
+      if(this.permissionObject == Permission.Admin){
+        this.description = "Quản lý các lớp môn học";
+        if(this.settings['actions'] == false){
+          delete this.settings['actions']
+        }
+      } else{
+        this.description = "Danh sách lớp môn học";
+        this.settings['actions'] = false;
       }
-    }
 
-    this.objectKey = Object.keys(this.surveyClassObject);
-    this.objectKey.splice(0, 1);
-
-    this.settings = {
-      mode: 'external',
-      columns: {
+      this.surveyClassObject = {
+        _id: {
+          name: "_id",
+          value: "",
+        },
         code: {
-          title: 'Mã lớp môn học',
-          width: '25%'
+          title: "Mã lớp môn học",
+          name: "code",
+          value: "",
+          valid: [{
+            key: TypeValid.Pattern,
+            message: "Mã lớp môn học không đúng định dạng"
+          }],
+          validators: [
+            Validators.required,
+            Validators.pattern('^[a-zA-Z0-9\\s]+$')
+          ]
         },
         name: {
-          title: 'Tên lớp môn học',
-          width: '30%'
+          title: "Tên lớp môn học",
+          name: "name",
+          value: "",
+          valid: [{
+            key: TypeValid.Pattern,
+            message: "Tên lớp môn học không đúng định dạng"
+          }],
+          validators: [
+            Validators.required,
+            Validators.pattern(
+              "^[A-Za-z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" +
+              "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểễếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" +
+              "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$"
+            )
+          ]
         },
-        teacher: {
-          title: 'Tên giáo viên',
-          width: '25%',
-          valuePrepareFunction: (value) => { 
-            return value[0].fullname;
-          }
+        semester: {
+          title: "Học kỳ",
+          name: "semester",
+          value: "",
+          valid: [{
+            key: TypeValid.Pattern,
+            message: "Tên học kỳ không đúng định dạng"
+          }],
+          validators: [
+            Validators.required,
+            Validators.pattern(
+              "^[A-Za-z0-9-_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" +
+              "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểễếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" +
+              "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$"
+            )
+          ]
+        },
+        idTeacher: {
+          title: "Mã giáo viên",
+          name: "idTeacher",
+          value: "",
+          valid: [{
+            key: TypeValid.Pattern,
+            message: "Mã giáo viên không đúng định dạng"
+          }],
+          validators: [
+            Validators.required,
+            Validators.pattern('^[a-zA-Z0-9]+$')
+          ]
+        },
+        time: {
+          title: "Thời gian",
+          name: "time",
+          value: "",
+          valid: [/*{
+            key: TypeValid.Pattern,
+            message: "Thời gian không đúng định dạng"
+          }*/],
+          validators: [
+            Validators.required,
+            // Validators.pattern('[\/A-Za-z0-9_-]+$')
+          ]
+        },
+        location: {
+          title: "Vị trí",
+          name: "location",
+          value: "",
+          valid: [{
+            key: TypeValid.Pattern,
+            message: "Vị trí không đúng định dạng"
+          }],
+          validators: [
+            Validators.required,
+            Validators.pattern('[\/A-Za-z0-9_-]+$')
+          ]
+        },
+        creditNumber: {
+          title: "Số tín chỉ",
+          name: "creditNumber",
+          value: "",
+          valid: [{
+            key: TypeValid.Pattern,
+            message: "Số tín chỉ không đúng định dạng"
+          }],
+          validators: [
+            Validators.required,
+            Validators.pattern('[0-9]+$')
+          ]
         }
-      },
-      pager: {
-        perPage: 5
-      },
-      attr: {
-        class: 'table table-bordered'
-      },
-      add: {
-        addButtonContent: '<i class="fas fa-file-import"> Nhập</i>',
-      },
-      edit: {
-        editButtonContent: '<i class="fas fa-edit mr-sm-2"></i>',
-      },
-      delete: {
-        deleteButtonContent: '<i class="fas fa-trash ml-sm-2"></i>',
-      },
-    };
-    this.loadData();
-    this.initForm();
-
-    this.subSettings = {
-      actions: false,
-      columns: {
-        code: {
-          title: 'Mã lớp sinh viên',
-          width: '30%'
-        },
-        fullname: {
-          title: 'Họ và tên',
-          width: '40%'
-        },
-        class: {
-          title: 'Lớp',
-          width: '30%'
-        }
-      },
-      pager: {
-        perPage: 10
-      },
-      attr: {
-        class: 'table table-bordered'
       }
-    }; 
+
+      this.objectKey = Object.keys(this.surveyClassObject);
+      this.objectKey.splice(0, 1);
+
+      this.loadData();
+      this.initForm();
+
+      this.subSettings = {
+        actions: false,
+        columns: {
+          code: {
+            title: 'Mã lớp sinh viên',
+            width: '30%'
+          },
+          fullname: {
+            title: 'Họ và tên',
+            width: '40%'
+          },
+          class: {
+            title: 'Lớp',
+            width: '30%'
+          }
+        },
+        pager: {
+          perPage: 10
+        },
+        attr: {
+          class: 'table table-bordered'
+        }
+      }; 
+    } else {
+      this.router.navigate(['/error'])
+      // sang trang handler error
+    }
+
   }
 
   resetValue(){
@@ -288,7 +308,7 @@ export class ManageSurveyClassComponent implements OnInit {
   }
 
   onUpdateByImport(event){
-    if(event.target.files[0]){
+    if(event.target.files[0] && this.permissionObject == Permission.Admin){
       let check = confirm("Bạn muốn nhập danh sách lớp môn học này: " + event.target.files[0].name + " ?");
       if(check){
         this.manageSurveyClassService.updateByImport(this.surveyClassObject['_id'].value, event.target.files[0]).subscribe(
@@ -328,7 +348,7 @@ export class ManageSurveyClassComponent implements OnInit {
                     event.data.code + ' - ' + 
                     event.data.name + ' - ' + 
                     event.data.semester);
-    if(check){
+    if(check && this.permissionObject == Permission.Admin){
       this.manageSurveyClassService._delete(event.data._id).subscribe(
         message => {
           if(message.error){
@@ -369,7 +389,7 @@ export class ManageSurveyClassComponent implements OnInit {
   }
 
   importFile(event){
-    if(event.target.files[0]){
+    if(event.target.files[0] && this.permissionObject == Permission.Admin){
       let check = confirm("Bạn muốn nhập danh sách lớp môn học này: " + event.target.files[0].name + " ?");
       if(check){
         this.manageSurveyClassService.importFile(event.target.files[0]).subscribe(
@@ -414,8 +434,7 @@ export class ManageSurveyClassComponent implements OnInit {
   // }
 
   onSubmit(){
-    console.log(12)
-    if(!this.formSurveyClass.invalid){
+    if(!this.formSurveyClass.invalid && this.permissionObject == Permission.Admin){
       this.manageSurveyClassService.update(this.formSurveyClass.value).subscribe(
         classSurvey => {
           if(classSurvey.error){
@@ -440,6 +459,13 @@ export class ManageSurveyClassComponent implements OnInit {
 
   onSurvey(){
     // route sang survey
+    if(this.permissionObject == Permission.Admin){
+      // tim -> get
+    } else if(this.permissionObject == Permission.Teacher){
+      // di den trang kq or hien chua co survey
+    } else {
+      // di den trang tra loi survey
+    }
   }
 
 }

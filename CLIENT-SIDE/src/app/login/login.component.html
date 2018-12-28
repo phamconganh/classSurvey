@@ -1,3 +1,34 @@
-<p>
-  login works!
-</p>
+<div class="card container">
+  <div class="card-body">
+    <div class="col-sm-5 float-left offset-sm-1">
+      <h1 class="card-title">Đăng nhập</h1>
+      <form name="form" (ngSubmit)="onLogin()" [formGroup] = "formLogin">
+        <div>
+          <label for="username"><i class="fas fa-user-circle btn btn-primary"></i> Username </label>
+          <input type="text" class="form-control" formControlName="username" placeholder="Tên đăng nhập của bạn"/>
+          <div *ngIf="formLogin.controls['username'].touched 
+              && formLogin.controls['username'].hasError('pattern')"
+              class="alert alert-danger">Tên đăng nhập không đúng định dạng
+          </div>
+        </div>
+
+        <div class="form-group">
+          <br>
+          <label for="password"><i class="fas fa-unlock btn btn-primary"></i> Mật khẩu</label>
+          <input autocomplete type="password" class="form-control" formControlName="password" placeholder="Mật khẩu của bạn"/>
+        </div>
+        <div class="form-group">
+          <br>
+          <button [disabled]="isLoadingLogin || formLogin.invalid" class="btn btn-primary float-left btn-lg" >Đăng nhập</button>
+          <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+          <br><br>
+        </div>
+      </form>
+    </div>
+    <div id="image" class="float-right col-sm-5 offset-sm-1">
+      <img src="../../assets/img/signin-image.jpg" alt="login image" style="width:90%">
+      <br><br>
+    </div>
+    
+  </div>
+</div>

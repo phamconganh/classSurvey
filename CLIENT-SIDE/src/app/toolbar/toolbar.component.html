@@ -1,22 +1,31 @@
-<nav class="navbar navbar-expand-sm bg-primary navbar-dark fixed-top">
-  <a class="navbar-brand" href="#">
-    <img src="assets/img/UET.png" alt="Uet logo">
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+  <a class="navbar-brand" href="/">
+    <img src="assets/img/Banner.png" alt="Uet logo">
     <span>
       Class survey
     </span>
   </a>
-  <div class="container">
-    <a>Home</a>
-    <a>Quản lý sinh viên</a>
-    <a>Quản lý giáo viên</a>
-    <a>Quản lý phiếu khảo sát</a>
-    <a>Quản lý các cuộc khảo sát</a>
-    <a>Xem kết quả</a>
-    <a>Đánh giá</a>
-    <a>Đăng xuất</a>
-    <form class="form-inline">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+
+  <button *ngIf="isLogined" class="navbar-toggler" type="button"
+          (click)="toggleNavbar()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+
+  <div class="collapse navbar-collapse"
+       [ngClass]="{ 'show': navbarOpen }">
+    <ul class="navbar-nav mr-auto">
+      <li *ngFor="let item of activity" class="nav-item">
+        <a class="nav-link text-light" [href]="item.link"><i [class]="item.icon"> {{item.title}}</i></a>
+      </li>
+    </ul>
+    <ul class="navbar-nav float-right"> 
+      <li *ngIf="isLogined" >
+        <a class="nav-link text-light" (click)="onLogout()"><i class="fas fa-sign-out-alt"> Đăng xuất</i></a>
+      </li>
+      <li *ngIf="!isLogined" >
+        <a class="nav-link text-light" href="/login"><i class="fas fa-sign-in-alt"> Đăng nhập</i></a>
+      </li>
+    </ul>
   </div>
 </nav>

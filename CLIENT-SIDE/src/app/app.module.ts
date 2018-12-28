@@ -1,7 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing/app-routing.module';
@@ -17,6 +19,15 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { AuthorizationRequestInterceptor } from './authorization-request-interceptor/authorization-request-interceptor.component';
+
+import { AdminOrTeacherGuard } from "./guards/admin-or-teacher.guard";
+import { AdminGuard } from "./guards/admin.guard";
+import { PermissionGuard } from "./guards/permission.guard";
+import { StudentGuard } from "./guards/student.guard";
+
+import { AppShareService } from "./app-share.service";
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -30,18 +41,32 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
     ViewResultComponent,
     AnwserSurveyComponent,
     ToolbarComponent,
-    FooterComponent
+    FooterComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    LoadingBarHttpClientModule,
+    LoadingBarRouterModule,
     AppRoutingModule,
     ModalModule.forRoot(),
     Ng2SmartTableModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizationRequestInterceptor,
+      multi: true,
+    },
+    AdminGuard,
+    AdminOrTeacherGuard,
+    StudentGuard,
+    PermissionGuard,
+    AppShareService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

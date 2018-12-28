@@ -39,39 +39,39 @@ var ClassSection = new Schema({
 
 var ClassSectionModel = mongoose.model('ClassSection', ClassSection, 'classSection');
 
-let match = {
-    $match: {
+// let match = {
+//     $match: {
        
-    }
-}
-let lookupTeacher = {
-    $lookup:{
-        from: 'user',
-        localField: 'idTeacher',
-        foreignField: 'code',
-        as: 'teacher'
-    }
-}
-let lookupStudent = {
-    $lookup:{
-        from: 'user',
-        localField: 'idStudents',
-        foreignField: 'code',
-        as: 'students'
-    }
-}
+//     }
+// }
+// let lookupTeacher = {
+//     $lookup:{
+//         from: 'user',
+//         localField: 'idTeacher',
+//         foreignField: 'code',
+//         as: 'teacher'
+//     }
+// }
+// let lookupStudent = {
+//     $lookup:{
+//         from: 'user',
+//         localField: 'idStudents',
+//         foreignField: 'code',
+//         as: 'students'
+//     }
+// }
 
-ClassSectionModel.aggregate([
-    match, lookupTeacher, 
-    {$unwind:"$idStudents"}, lookupStudent
-// {$group:{"_id":"$location","count":{$sum:1}}},
-// {$group:{"_id":null,"location_details":{$push:{"location":"$_id",
-//                                                "count":"$count"}}}},
-]).exec((err, result)=>{
-	result.forEach(element=>{
-		console.log(element)
-	})
-})
+// ClassSectionModel.aggregate([
+//     match, lookupTeacher, 
+//     {$unwind:"$idStudents"}, lookupStudent
+// // {$group:{"_id":"$location","count":{$sum:1}}},
+// // {$group:{"_id":null,"location_details":{$push:{"location":"$_id",
+// //                                                "count":"$count"}}}},
+// ]).exec((err, result)=>{
+// 	result.forEach(element=>{
+// 		console.log(element)
+// 	})
+// })
 
 // {$unwind:"$location"},
 // {$group:{"_id":"$location","count":{$sum:1}}},
@@ -98,3 +98,33 @@ ClassSectionModel.aggregate([
 //     console.log(rs)
 //     // saved!
 //   });
+
+var bcrypt = require('bcryptjs');
+/**
+ * Schema user
+ */
+var User = new Schema({
+	username: String,
+	vnuEmail: String,
+	password: String,
+    code: String,
+    fullname: String,
+	// permission = 0 admin, 1 teacher, 2 user
+	permission: Number,
+    classSections: [{type: String, ref: 'ClassSection'}]
+    // active: Boolean,
+    // timestamp: Date
+})
+
+var UserModel = mongoose.model('User', User, 'user');
+
+let data = {
+    username: 'admin',
+    password: bcrypt.hashSync('123456', bcrypt.genSaltSync(10)),
+    permission: 0,
+    code: 'admin'
+}
+
+UserModel.create(data, function (err, rs) {
+  console.log(rs)
+})

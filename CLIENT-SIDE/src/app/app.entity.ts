@@ -28,3 +28,24 @@ export const SelectObject = [
     { value: Permission.Teacher, title: 'Giáo viên' },
     { value: Permission.Student, title: 'Sinh viên'}
   ]
+
+export function saveToLocal(token, permission){
+    localStorage.setItem('token', token);
+    localStorage.setItem('permission', permission);
+}
+
+export function deleteFromLocal(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('permission');
+}
+
+export function loadToken(){
+    return localStorage.getItem('token');
+}
+
+export function loadPermission(){
+    let permission = localStorage.getItem('permission');
+    if(permission){
+        return parseInt(permission);
+    }
+}
