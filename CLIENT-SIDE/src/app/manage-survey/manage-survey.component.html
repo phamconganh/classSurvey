@@ -1,112 +1,184 @@
 
 <div class="container" style='margin-top: 5rem'>
-  <h1 style='display: iline-block'>Phieu danh gia mon hoc ... </h1>
-  <span class='interact' style='display: inline-block; float: right'>Khoi phuc mac dinh</span>
+  <h1 style='display: iline-block'>Phieu danh gia mon hoc {{ data.idClassSection.name }}</h1>
+
+  <button class='btn btn-primary mb-2 mr-sm-2 float-right'><i class="fas fa-sync-alt"></i> Khoi phuc mac dich</button>
+
   <table class="table list-directory">
-      <tbody>
-        <tr>
-          <td class='interact'>Add new</td>
-          <td><input type='text' placeholder="ten danh muc" /></td>
-        </tr>
-        <tr>
-          <td class='interact'>edit</td>
-          <td>
-            <span class='name-directory'>Co so VC</span>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="padding: 0px; padding-left: 100px;">
-            <table class= 'table list-query'>
-              <tr>
-                <td> add new </td>
-                <td><input type='text' placeholder="ten cau hoi" /></td>
+    <tbody>
+      <tr>
+        <td colspan="100%">
+          <button class="btn btn-primary mb-2 mr-sm-2" (click)="onCreate()"><i class="fas fa-list-ul"></i> Thêm danh muc</button>
+        </td>
+      </tr>
+      <tr *ngFor='let setData of data.survey'>
+        <td>
+          <table class='table'>
+            <tr>
+                <td class='interact'><span (click)="editNameSection()">Sua ten</span></td>
+                <td style='width: 40%'>
+                  <span class='name-directory'>{{ setData.section }}</span>
+                </td>
                 <td>
-                  <select>
-                    <option>Point</option>
-                    <option>Text</option>
-                  </select>
+                  <button type='button' class='w-100 p-0 btn btn-outline-light btn-lg btn-block border-0 text-dark' 
+                      (click)="show = !show"><span>{{show ?  'An di' : 'Hien chi tiet'}} <i class="{{show ?  'fas fa-caret-up' : 'fas fa-caret-down'}} fa-lg"></i></span></button>
+                </td>
+            </tr>
+            <tr *ngIf="show">
+              <td colspan="3" style="padding: 0px; padding-left: 100px;">
+                <table class= 'table list-query'>
+                  <tr>
+                    <td colspan="3">
+                      <button class='btn btn-primary mb-2 mr-sm-2' (click)='onCreateQuery()'><i class="fas fa-plus-circle"></i> Them cau hoi</button>
+                    </td>
+                  </tr>
+                  <tr *ngFor='let listQuery of setData.dataSection'>
+                    <td class='interact'>edit | delete</td>
+                    <td>
+                      <span class='name-query'>{{ listQuery.question }}</span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div> 
+
+<div bsModal #nameSectionModal='bs-modal'
+  class='modal fade' tabindex='-1'
+  role='dialog' aria-labelledby="detail-info"
+  (onHide)='resetValue()'
+>
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4>Chinh sua ten danh muc</h4>
+      <button type="button" class="close pull-right" (click)="nameSectionModal.hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class='modal-body'>
+      <form (ngSubmit)='onSubmitNameSection();' [formGroup]="formSurvey">
+        <table class="table">
+            <tbody>
+              <tr>
+                <td>
+                  <label>Ten danh muc: </label>
+                </td>
+                <td>
+                    <input class="input-group" type='text' 
+                    formControlName="editName"
+                    placeholder="ten danh muc" />
                 </td>
               </tr>
               <tr>
-                <td class='interact'>edit | delete</td>
-                <td>
-                  <span class='name-query'>So luong giang duong phu hop</span>
-                </td>
-                <td>
-                  <ul>
-                    <li><i class="far fa-star"></i></li>
-                    <li><i class="far fa-star"></i></li>
-                    <li><i class="far fa-star"></i></li>
-                    <li><i class="far fa-star"></i></li>
-                    <li><i class="fas fa-star"></i></li>
-                  </ul>
+                <td colspan="100%">
+                  <button type="submit" class="btn btn-primary float-right" ><i class="fas fa-save"></i></button>
                 </td>
               </tr>
-              <tr>
-                <td class='interact'>edit | delete</td>
-                <td>
-                  <span class='name-query'>Chat luong giang duong</span>
-                </td>
-                <td>
-                  <ul>
-                    <li><i class="far fa-star"></i></li>
-                    <li><i class="far fa-star"></i></li>
-                    <li><i class="far fa-star"></i></li>
-                    <li><i class="far fa-star"></i></li>
-                    <li><i class="fas fa-star"></i></li>
-                  </ul>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </tbody>
+          </table>
+        </form> 
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #detailModal="bs-modal"
+    class="modal fade" tabindex="-1"
+    role="dialog" aria-labelledby="detail-info"
+    (onHide)="resetValue()"
+>
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Them Danh muc bieu mau cau hoi</h4>
+          <button type="button" class="close pull-right" (click)="detailModal.hide();" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class='modal-body'>
+          <form (ngSubmit)='onSubmit();' [formGroup] = "formSurvey">
+              <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <label>Ten danh muc: </label>
+                      </td>
+                      <td>
+                          <input class="input-group" type='text' 
+                          formControlName="test"
+                          placeholder="ten danh muc" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="100%">
+                        <button type="submit" class="btn btn-primary float-right" ><i class="fas fa-save"></i></button>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+          </form> 
+        </div>
+      </div>
+    </div>
 </div>
 
 
-<!-- <tr>
-      <td class='title-survey'>Giang duong dap ung mon hoc</td>
-          <td>
-            <ul>
-              <li><i class="far fa-star point-star"></i></li>
-         
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <td class='title-survey'>Trang thiet bi dap ung yeu cau giang day va hoc tap</td>
-          <td>
-            <ul>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="fas fa-star"></i></li>
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <td class='title-survey'>Giang duong dap ung mon hoc</td>
-          <td>
-            <ul>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="fas fa-star"></i></li>
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <td class='title-survey'>Giang duong dap ung mon hoc</td>
-          <td>
-            <ul>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="far fa-star"></i></li>
-              <li><i class="fas fa-star"></i></li>
-            </ul>
-          </td>
-        </tr> -->
+<div bsModal #queryModal="bs-modal"
+    class="modal fade" tabindex="-1"
+    role="dialog" aria-labelledby="detail-info"
+    (onHide)="resetValue()"
+>
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Them cau khao sat</h4>
+          <button type="button" class="close pull-right" (click)="queryModal.hide();" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class='modal-body'>
+          <form (ngSubmit)='onQuerySubmit();'>
+              <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <label>Noi dung cau hoi: </label>
+                      </td>
+                      <td>
+                          <input 
+                          type='text' 
+                          class="input-group" 
+                          placeholder="Noi dung cau hoi" 
+                          class="input-group" type='text' 
+                          formControlName="query"
+                          />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label>Hinh thuc hoi: </label>
+                      </td>
+                      <td>
+                        <select class="form-control">
+                            <option>Danh gia diem</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="100%">
+                        <button type="submit" class="btn btn-primary float-right" ><i class="fas fa-save"></i></button>
+                      </td>
+                    </tr>
+                  </tbody>
+              </table>
+          </form> 
+        </div>
+      </div>
+    </div>
+</div>
